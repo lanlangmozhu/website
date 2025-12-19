@@ -106,9 +106,19 @@ pnpm build
 
 1. **在本地生成 SSH 密钥对**（如果还没有）：
    ```bash
-   ssh-keygen -t rsa -b 4096 -C "github-actions" -f ~/.ssh/github_actions
+   ssh-keygen -t rsa -b 4096 -C "github-actions" -f ~/.ssh/github_actions -N ""
    ```
-   按提示操作，可以设置密码或直接回车（不设置密码）
+   **重要**：`-N ""` 参数表示不设置密码，这是必需的！GitHub Actions 无法使用有密码的私钥。
+   
+   如果已有密钥但设置了密码，需要重新生成：
+   ```bash
+   # 备份旧密钥（可选）
+   mv ~/.ssh/github_actions ~/.ssh/github_actions.old
+   mv ~/.ssh/github_actions.pub ~/.ssh/github_actions.pub.old
+   
+   # 生成新的无密码密钥
+   ssh-keygen -t rsa -b 4096 -C "github-actions" -f ~/.ssh/github_actions -N ""
+   ```
 
 2. **将公钥添加到服务器**：
 
