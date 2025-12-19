@@ -125,7 +125,6 @@ jobs:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     environment:
       name: production
-      url: ${{ secrets.DEPLOY_URL }}
     steps:
       - name: Download build artifacts
         uses: actions/download-artifact@v4
@@ -172,7 +171,43 @@ jobs:
             find . -type d -exec chmod 755 {} \;
             echo "✅ Permissions set successfully"
 
+      - name: Verify deployment
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script: |
+            DEPLOY_PATH="${{ secrets.DEPLOY_PATH || '/www/wwwroot/your-domain.com' }}"
+            cd $DEPLOY_PATH
+            
+            # 检查关键文件是否存在
+            if [ ! -f "index.html" ]; then
+              echo "❌ Deployment verification failed - index.html not found"
+              exit 1
+            fi
+            
+            # 检查文件数量（至少应该有 index.html 和 _next 目录）
+            FILE_COUNT=$(find . -type f | wc -l)
+            echo "📊 Deployed files count: $FILE_COUNT"
+            
+            # 显示部署的文件列表（前10个）
+            echo "📁 Deployed files (first 10):"
+            find . -type f | head -10
+            
+            # 检查 _next 目录（Next.js 静态资源）
+            if [ -d "_next" ]; then
+              echo "✅ Next.js static assets (_next/) found"
+            else
+              echo "⚠️  Warning: _next directory not found"
+            fi
+            
+            echo "✅ Deployment verification successful!"
+
       - name: Deployment notification
         if: success()
-        run: echo "✅ Static website deployed successfully to Baota Panel!"
+        run: |
+          echo "✅ Static website deployed successfully to Baota Panel!"
+          echo "📦 Deployment path: ${{ secrets.DEPLOY_PATH || '/www/wwwroot/your-domain.com' }}"
 

@@ -308,6 +308,123 @@ pnpm test:run
    scp -r out/* user@server:/www/wwwroot/your-domain.com/
    ```
 
+## ✅ 如何验证部署是否成功
+
+### 1. 检查 GitHub Actions 运行状态
+
+1. **进入 GitHub 仓库**：
+   - 访问 `https://github.com/你的用户名/website`
+   - 点击顶部的 **Actions** 标签页
+
+2. **查看工作流运行状态**：
+   - 找到最新的 workflow run（应该显示你最近的 commit）
+   - 检查所有 job 的状态：
+     - ✅ **绿色勾号** = 成功
+     - ❌ **红色叉号** = 失败
+     - 🟡 **黄色圆点** = 进行中
+
+3. **查看部署日志**：
+   - 点击 **Deploy to Server** job
+   - 展开各个步骤查看详细日志
+   - 查找以下成功信息：
+     - `✅ Build artifacts verified`
+     - `✅ Permissions set successfully`
+     - `✅ Deployment verification successful!`
+     - `✅ Static website deployed successfully to Baota Panel!`
+
+### 2. 检查服务器上的文件
+
+**通过 SSH 登录服务器检查**：
+
+```bash
+# SSH 登录服务器
+ssh root@你的服务器IP
+
+# 进入网站目录
+cd /www/wwwroot/你的域名
+
+# 检查文件是否存在
+ls -la
+
+# 应该看到以下文件/目录：
+# - index.html（首页）
+# - _next/（Next.js 静态资源）
+# - 其他页面文件
+
+# 检查文件修改时间（应该是最近的时间）
+ls -lt | head -10
+
+# 检查文件权限
+ls -la index.html
+# 应该显示：-rw-r--r-- 1 www www ...
+```
+
+### 3. 访问网站验证
+
+1. **直接访问网站**：
+   - 在浏览器中打开你的网站 URL
+   - 检查页面是否正常显示
+   - 检查是否有最新的更改
+
+2. **检查浏览器开发者工具**：
+   - 按 `F12` 打开开发者工具
+   - 查看 **Network** 标签页
+   - 确认所有资源（CSS、JS、图片）都正常加载
+   - 检查是否有 404 错误
+
+3. **检查页面源代码**：
+   - 右键点击页面 → 查看页面源代码
+   - 确认 HTML 内容是最新的
+
+### 4. 使用命令行验证（可选）
+
+```bash
+# 检查网站是否可以访问
+curl -I https://你的域名.com
+
+# 应该返回 HTTP 200 状态码
+
+# 检查首页内容
+curl https://你的域名.com | head -20
+
+# 检查特定文件是否存在
+curl -I https://你的域名.com/index.html
+curl -I https://你的域名.com/_next/static/...
+```
+
+### 5. 在宝塔面板中检查
+
+1. **文件管理**：
+   - 登录宝塔面板
+   - 进入「文件」→ 找到网站目录
+   - 检查文件修改时间是否为最新
+
+2. **网站日志**：
+   - 进入「网站」→「设置」→「日志」
+   - 查看访问日志，确认有新的访问记录
+
+### 6. 部署验证步骤（自动）
+
+CI/CD 工作流已包含自动验证步骤，会检查：
+- ✅ `index.html` 文件是否存在
+- ✅ 文件数量统计
+- ✅ `_next` 目录是否存在
+- ✅ 显示部署的文件列表
+
+如果验证失败，GitHub Actions 会显示错误信息。
+
+## 🎯 快速验证清单
+
+部署后，快速检查以下项目：
+
+- [ ] GitHub Actions 显示所有 job 为 ✅ 成功
+- [ ] 部署 job 的日志显示 `✅ Deployment verification successful!`
+- [ ] 服务器上 `/www/wwwroot/你的域名/index.html` 文件存在
+- [ ] 文件修改时间为最近的时间
+- [ ] 网站可以正常访问
+- [ ] 页面显示最新的内容
+- [ ] 浏览器控制台没有错误
+
 ### 构建失败
 
 1. **本地测试构建**：
