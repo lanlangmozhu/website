@@ -22,9 +22,9 @@
 
 ### 4. Deploy（部署到服务器）
 - 仅在 main/master 分支 push 时触发
-- 通过 SSH 部署到自建服务器
-- 自动重启应用
-- 健康检查
+- 通过 SSH 部署静态文件到宝塔面板
+- 设置文件权限
+- 静态网站，无需重启应用
 
 ## 配置 GitHub Secrets
 
@@ -35,68 +35,40 @@
 - `SSH_HOST`: 服务器 IP 地址或域名
 - `SSH_USERNAME`: SSH 用户名
 - `SSH_PRIVATE_KEY`: SSH 私钥（完整内容，包括 -----BEGIN 和 -----END）
-- `DEPLOY_PATH`: 部署路径（例如：`/var/www/your-site`）
+- `DEPLOY_PATH`: 宝塔面板网站目录路径（例如：`/www/wwwroot/your-domain.com`）
 
 ### 可选密钥
 
 - `SSH_PORT`: SSH 端口（默认：22）
 - `DEPLOY_URL`: 部署后的网站 URL（用于显示在 GitHub Actions 中）
 
-## 服务器准备
+## 服务器准备（宝塔面板）
 
-### 1. 安装 Node.js 和 pnpm
+### 1. 在宝塔面板中创建网站
 
-```bash
-# 安装 Node.js 20
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# 安装 pnpm
-npm install -g pnpm@8
-```
+1. 登录宝塔面板
+2. 点击「网站」→「添加站点」
+3. 填写域名，选择「纯静态」
+4. 记录网站根目录路径（如 `/www/wwwroot/your-domain.com`）
 
 ### 2. 配置 SSH 密钥
 
 ```bash
-# 在服务器上创建部署用户（可选）
-sudo adduser deploy
-
 # 在本地生成 SSH 密钥对
-ssh-keygen -t rsa -b 4096 -C "github-actions"
+ssh-keygen -t rsa -b 4096 -C "github-actions" -f ~/.ssh/github_actions
 
-# 将公钥添加到服务器
-ssh-copy-id -i ~/.ssh/id_rsa.pub deploy@your-server.com
+# 查看公钥内容
+cat ~/.ssh/github_actions.pub
+
+# 在宝塔面板中添加公钥：安全 → SSH 密钥管理 → 添加密钥
 
 # 将私钥内容复制到 GitHub Secrets 的 SSH_PRIVATE_KEY
-cat ~/.ssh/id_rsa
+cat ~/.ssh/github_actions
 ```
 
-### 3. 配置 PM2（推荐）
+### 3. 配置网站目录权限
 
-```bash
-# 安装 PM2
-npm install -g pm2
-
-# 创建 PM2 配置文件 ecosystem.config.js
-```
-
-### 4. 配置 Nginx（可选）
-
-```nginx
-server {
-    listen 80;
-    server_name your-domain.com;
-
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }
-}
-```
+确保网站目录有写入权限，宝塔面板会自动处理 Nginx 配置。
 
 ## 本地测试
 
@@ -133,8 +105,8 @@ pnpm build
 ### 部署失败
 
 1. 检查 SSH 连接是否正常
-2. 验证服务器上的部署路径是否存在且有写权限
-3. 检查服务器上的 Node.js 和 pnpm 版本
+2. 验证宝塔面板网站目录路径是否正确且有写权限
+3. 检查宝塔面板网站配置是否正常
 4. 查看 GitHub Actions 日志获取详细错误信息
 
 ### 测试失败

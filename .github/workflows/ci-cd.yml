@@ -104,22 +104,17 @@ jobs:
 
       - name: Check build output
         run: |
-          if [ ! -d ".next" ]; then
-            echo "❌ Build failed - .next directory not found"
+          if [ ! -d "out" ]; then
+            echo "❌ Build failed - out directory not found"
             exit 1
           fi
-          echo "✅ Build successful"
+          echo "✅ Build successful - Static files generated in out/"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: build-files
-          path: |
-            .next/
-            public/
-            package.json
-            pnpm-lock.yaml
-            next.config.js
+          name: static-files
+          path: out/
           retention-days: 7
 
   # 部署到服务器
@@ -135,33 +130,34 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
-          name: build-files
+          name: static-files
           path: .
 
       - name: Verify build artifacts
         run: |
-          if [ ! -d ".next" ]; then
-            echo "❌ Build artifacts not found - .next directory missing"
+          if [ ! -d "out" ]; then
+            echo "❌ Build artifacts not found - out directory missing"
             exit 1
           fi
-          if [ ! -f "package.json" ]; then
-            echo "❌ Build artifacts incomplete - package.json missing"
+          if [ ! -f "out/index.html" ]; then
+            echo "❌ Build artifacts incomplete - index.html missing"
             exit 1
           fi
-          echo "✅ Build artifacts verified"
+          echo "✅ Build artifacts verified - Static files ready for deployment"
 
-      - name: Deploy to server via SSH
+      - name: Deploy static files to Baota Panel
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
-          source: ".next,public,package.json,pnpm-lock.yaml,next.config.js"
-          target: ${{ secrets.DEPLOY_PATH || '/var/www/your-site' }}
-          strip_components: 0
+          source: "out/*"
+          target: ${{ secrets.DEPLOY_PATH || '/www/wwwroot/your-domain.com' }}
+          strip_components: 1
+          rm: true
 
-      - name: Install dependencies on server
+      - name: Set correct permissions
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -169,43 +165,14 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
-            cd ${{ secrets.DEPLOY_PATH || '/var/www/your-site' }}
-            pnpm install --prod --frozen-lockfile
-
-      - name: Restart application
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT || 22 }}
-          script: |
-            cd ${{ secrets.DEPLOY_PATH || '/var/www/your-site' }}
-            # 使用 PM2 管理进程（如果已安装）
-            if command -v pm2 &> /dev/null; then
-              pm2 restart your-site || pm2 start npm --name "your-site" -- start
-            else
-              # 或者使用 systemd（需要配置服务）
-              sudo systemctl restart your-site || echo "请手动重启应用"
-            fi
-
-      - name: Health check
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT || 22 }}
-          script: |
-            sleep 5
-            curl -f http://localhost:3000 || exit 1
+            cd ${{ secrets.DEPLOY_PATH || '/www/wwwroot/your-domain.com' }}
+            # 设置文件权限（宝塔面板通常使用 www 用户）
+            chown -R www:www . || chown -R $USER:$USER .
+            find . -type f -exec chmod 644 {} \;
+            find . -type d -exec chmod 755 {} \;
+            echo "✅ Permissions set successfully"
 
       - name: Deployment notification
-        if: always()
-        run: |
-          if [ "${{ job.status }}" == "success" ]; then
-            echo "✅ Deployment successful!"
-          else
-            echo "❌ Deployment failed!"
-          fi
+        if: success()
+        run: echo "✅ Static website deployed successfully to Baota Panel!"
 
