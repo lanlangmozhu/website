@@ -6,7 +6,7 @@
 
 - **测试框架**: Vitest + React Testing Library
 - **CI/CD 平台**: GitHub Actions
-- **包管理器**: pnpm 8
+- **包管理器**: pnpm 9
 - **Node.js**: 20
 - **运行环境**: ubuntu-latest
 - **部署方式**: 静态网站（Next.js Static Export）
