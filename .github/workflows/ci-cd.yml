@@ -174,6 +174,30 @@ jobs:
           echo "✅ Build artifacts verified - Static files ready for deployment"
           echo "📊 Files count in out/: $(find out -type f | wc -l)"
 
+      - name: Prepare deployment directory
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script: |
+            DEPLOY_PATH="${{ secrets.DEPLOY_PATH || '/www/wwwroot/your-domain.com' }}"
+            # 确保部署目录存在
+            mkdir -p $DEPLOY_PATH
+            echo "✅ Deployment directory exists: $DEPLOY_PATH"
+            # 清理旧文件（只删除静态文件，保留其他重要文件）
+            if [ -d "$DEPLOY_PATH" ]; then
+              echo "🧹 Cleaning old static files..."
+              # 删除旧的 HTML、JS、CSS 等静态文件，但保留 .htaccess、robots.txt 等配置文件
+              find $DEPLOY_PATH -maxdepth 1 -type f \( -name "*.html" -o -name "*.txt" -o -name "*.json" \) -delete 2>/dev/null || true
+              # 删除旧的 _next 和 post 目录（如果存在）
+              [ -d "$DEPLOY_PATH/_next" ] && rm -rf "$DEPLOY_PATH/_next" || true
+              [ -d "$DEPLOY_PATH/post" ] && rm -rf "$DEPLOY_PATH/post" || true
+              [ -d "$DEPLOY_PATH/docs" ] && rm -rf "$DEPLOY_PATH/docs" || true
+              echo "✅ Old files cleaned"
+            fi
+
       - name: Deploy static files to Baota Panel
         uses: appleboy/scp-action@master
         with:
@@ -184,7 +208,8 @@ jobs:
           source: "out/*"
           target: ${{ secrets.DEPLOY_PATH || '/www/wwwroot/your-domain.com' }}
           strip_components: 1
-          rm: true
+          rm: false
+          overwrite: true
 
       - name: Set correct permissions
         uses: appleboy/ssh-action@master
