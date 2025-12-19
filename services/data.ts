@@ -3,8 +3,9 @@ import { parseFrontmatter } from '../utils/markdown';
 
 export const loadPosts = async (): Promise<BlogPost[]> => {
   try {
-    // 通过 API 路由获取文件列表
-    const response = await fetch('/api/posts');
+    // 静态导出：从 JSON 文件读取文章列表
+    // 构建时会生成 public/posts-list.json
+    const response = await fetch('/posts-list.json');
     
     if (!response.ok) {
       console.warn('Failed to fetch posts list, falling back to empty list');

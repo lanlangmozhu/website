@@ -1,12 +1,13 @@
 ---
 slug: ts-zod
 title: ts-zod
-excerpt:  ## ts+zod 快速进阶与最佳实践   前提     在 AI 开发(特别是 LLM 应用)中，面临的最大挑战是“非确定性”。TypeScript 和 Zod 是解决这种非确定性的具体方案:  
+excerpt: ## ts+zod 快速进阶与最佳实践   前提     在 AI 开发(特别是 LLM 应用)中，面临的最大挑战是“非确定性”。TypeScript 和 Zod 是解决这种非确定性的具体方案:
 date: 2025-12-18
 author: 小菜权
 readTime: 3 分钟
 tags: []
 category: blog
+image: https://picsum.photos/seed/386/1200/600
 ---
 
 ## ts+zod 快速进阶与最佳实践 

@@ -1,12 +1,13 @@
 ---
 slug: promise
 title: Promise
-excerpt: ## promise  #### promise async/await  #### generator  遍历器    #### iterator    迭代器  #### promise 中断  
+excerpt: ## promise  #### promise async/await  #### generator  遍历器    #### iterator    迭代器  #### promise 中断
 date: 2025-12-18
 author: 小菜权
 readTime: 2 分钟
 tags: []
 category: blog
+image: https://picsum.photos/seed/824/1200/600
 ---
 
 ## promise

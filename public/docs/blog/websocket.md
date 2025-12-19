@@ -7,6 +7,7 @@ author: 小菜权
 readTime: 1 分钟
 tags: []
 category: blog
+image: https://picsum.photos/seed/376/1200/600
 ---
 
 

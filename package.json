@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "tsx scripts/process-article.ts --all && next build",
+    "build": "tsx scripts/process-article.ts --all && tsx scripts/generate-posts-list.ts && next build",
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
