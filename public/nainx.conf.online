@@ -87,11 +87,13 @@ server
     }
 
     # 处理 index.txt 请求（Next.js RSC payload，静态导出不需要）
-    # 返回空 JSON 响应（200 OK），避免客户端报错和连接关闭问题
-    location ~ /index\.txt$ {
-        add_header Content-Type application/json;
-        add_header Cache-Control "no-cache, no-store, must-revalidate";
-        return 200 '{}';
+    # 重定向到对应的 index.html，避免客户端跳转到 index.txt
+    location ~ ^(.+)/index\.txt$ {
+        return 301 $1/index.html;
+    }
+    # 处理根目录的 index.txt
+    location = /index.txt {
+        return 301 /index.html;
     }
 
     # Next.js 静态资源

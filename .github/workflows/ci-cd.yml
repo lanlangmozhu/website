@@ -161,6 +161,18 @@ jobs:
             echo "❌ Missing out/index.html"
             exit 1
           fi
+          
+          # 验证没有 index.txt 文件（应该已被 clean-index-txt.ts 删除）
+          echo "🧹 Verifying no index.txt files exist..."
+          INDEX_TXT_COUNT=$(find out -name "index.txt" -type f 2>/dev/null | wc -l)
+          if [ "$INDEX_TXT_COUNT" -gt 0 ]; then
+            echo "❌ Found $INDEX_TXT_COUNT index.txt file(s) that should have been deleted:"
+            find out -name "index.txt" -type f
+            echo "⚠️  These files will cause navigation issues. Please check clean-index-txt.ts script."
+            exit 1
+          fi
+          echo "✅ No index.txt files found (correctly cleaned)"
+          
           echo "✅ All required directories and files present"
 
       - name: Upload build artifacts
@@ -414,6 +426,18 @@ jobs:
             if [ ${#MISSING_PAGES[@]} -gt 0 ]; then
               echo "❌ Missing page files: ${MISSING_PAGES[*]}"
               exit 1
+            fi
+            
+            # 验证没有 index.txt 文件（应该已被 clean-index-txt.ts 删除）
+            echo "🧹 Verifying no index.txt files exist on server..."
+            INDEX_TXT_COUNT=$(find . -name "index.txt" -type f 2>/dev/null | wc -l)
+            if [ "$INDEX_TXT_COUNT" -gt 0 ]; then
+              echo "⚠️  Found $INDEX_TXT_COUNT index.txt file(s) on server:"
+              find . -name "index.txt" -type f
+              echo "⚠️  These files may cause navigation issues. Nginx will redirect them, but they should be removed."
+              # 不阻止部署，但给出警告
+            else
+              echo "✅ No index.txt files found (correctly cleaned)"
             fi
             
             # 检查文件数量
