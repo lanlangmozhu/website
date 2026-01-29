@@ -122,11 +122,13 @@ function generateRSSItems(): RSSItem[] {
       const dirPath = path.join(docsPath, config.folder);
       if (fs.existsSync(dirPath)) {
         const files = fs.readdirSync(dirPath, { recursive: true });
-        files
-          .filter((file: string) => typeof file === 'string' && file.endsWith('.md') && !file.startsWith('.'))
-          .forEach((file: string) => {
-            relativePaths.push(`${config.folder}/${file}`);
-          });
+        const mdFiles = files.filter(
+          (file): file is string =>
+            typeof file === 'string' && file.endsWith('.md') && !file.startsWith('.')
+        );
+        mdFiles.forEach((file) => {
+          relativePaths.push(`${config.folder}/${file}`);
+        });
       }
     }
   }

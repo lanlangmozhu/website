@@ -8,7 +8,7 @@ set -e
 echo "🚀 开始部署..."
 
 # 配置变量
-DEPLOY_PATH="/var/www/your-site"
+DEPLOY_PATH="/var/www/lanlangmozhu.com"
 NODE_VERSION="20"
 PORT=3000
 
