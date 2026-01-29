@@ -10,6 +10,31 @@ import path from 'path';
 import { parseFrontmatter } from '../utils/markdown';
 import { SITE_NAME, SITE_DESCRIPTION, NAV_CONFIG } from '../constants';
 
+// 加载 .env.local 文件
+function loadEnvLocal() {
+  const envPath = path.join(process.cwd(), '.env.local');
+  if (fs.existsSync(envPath)) {
+    const envContent = fs.readFileSync(envPath, 'utf-8');
+    envContent.split('\n').forEach(line => {
+      const trimmedLine = line.trim();
+      if (trimmedLine && !trimmedLine.startsWith('#')) {
+        const [key, ...valueParts] = trimmedLine.split('=');
+        if (key && valueParts.length > 0) {
+          const value = valueParts.join('=').trim();
+          // 移除引号
+          const cleanValue = value.replace(/^["']|["']$/g, '');
+          if (!process.env[key.trim()]) {
+            process.env[key.trim()] = cleanValue;
+          }
+        }
+      }
+    });
+  }
+}
+
+// 加载环境变量
+loadEnvLocal();
+
 // 站点配置（可以从环境变量读取，或使用默认值）
 const SITE_URL = process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://your-domain.com';
 const SITE_LANGUAGE = 'zh-CN';

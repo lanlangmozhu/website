@@ -25,9 +25,14 @@ async function processFile(filePath: string) {
     const content = fs.readFileSync(fullPath, 'utf-8');
     const filename = path.basename(filePath);
 
-    // 显示处理前的状态
+    // 检查是否已有 frontmatter
     const hasFrontmatter = content.trim().startsWith('---');
-    console.log(`   ${hasFrontmatter ? '已有 frontmatter，将补全缺失字段' : '没有 frontmatter，将生成新的'}`);
+    if (hasFrontmatter) {
+      console.log(`   ⏭️  已有 frontmatter，跳过处理`);
+      return true;
+    }
+
+    console.log(`   📝 没有 frontmatter，将生成新的`);
 
     const processedContent = await processArticleFrontmatter(
       content,
@@ -69,9 +74,22 @@ async function processAll() {
   console.log(`📚 找到 ${markdownFiles.length} 篇文章\n`);
 
   let success = 0;
+  let skipped = 0;
   let failed = 0;
 
   for (const filePath of markdownFiles) {
+    // 先检查是否已有 frontmatter，如果有则直接跳过
+    const fullPath = path.join(docsPath, filePath);
+    const content = fs.readFileSync(fullPath, 'utf-8');
+    const hasFrontmatter = content.trim().startsWith('---');
+    
+    if (hasFrontmatter) {
+      console.log(`📝 处理文件: ${filePath}`);
+      console.log(`   ⏭️  已有 frontmatter，跳过处理`);
+      skipped++;
+      continue;
+    }
+    
     const result = await processFile(filePath);
     if (result) {
       success++;
@@ -82,7 +100,7 @@ async function processAll() {
     await new Promise(resolve => setTimeout(resolve, 1000));
   }
 
-  console.log(`\n📊 处理完成: 成功 ${success}，失败 ${failed}`);
+  console.log(`\n📊 处理完成: 成功 ${success}，跳过 ${skipped}，失败 ${failed}`);
 }
 
 async function main() {

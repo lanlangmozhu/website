@@ -7,6 +7,7 @@ author: 小菜权
 readTime: 4 分钟
 tags: []
 category: blog
+image: https://picsum.photos/seed/384/1200/600
 ---
 
 # 交通灯问题

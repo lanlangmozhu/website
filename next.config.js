@@ -4,7 +4,11 @@ const nextConfig = {
   
   // 静态导出配置（用于宝塔面板等静态网站部署）
   // 只在生产构建时启用静态导出，开发模式使用正常模式
-  ...(process.env.NODE_ENV === 'production' && { output: 'export' }),
+  ...(process.env.NODE_ENV === 'production' && { 
+    output: 'export',
+    distDir: 'out', // 明确指定输出目录为 out
+    trailingSlash: true, // 生成 ai/index.html 而不是 ai.html，解决静态部署路由问题
+  }),
   
   images: {
     domains: ['api.dicebear.com', 'api.qrserver.com', 'images.unsplash.com', 'picsum.photos'],
