@@ -13,13 +13,20 @@ export async function generateStaticParams() {
     const postsListPath = path.join(process.cwd(), 'public', 'posts-list.json');
     
     if (!fs.existsSync(postsListPath)) {
-      console.warn('posts-list.json not found, scanning docs directory...');
+      console.warn('posts-list.json not found, returning empty array');
       return [];
     }
 
     const postsList: string[] = JSON.parse(
       fs.readFileSync(postsListPath, 'utf-8')
     );
+
+    // 如果文章列表为空，返回一个占位符以确保静态导出正常工作
+    if (!Array.isArray(postsList) || postsList.length === 0) {
+      console.warn('No posts found in posts-list.json, returning placeholder');
+      // 返回一个占位符，页面组件会处理 404
+      return [{ slug: '__placeholder__' }];
+    }
 
     const slugs: { slug: string }[] = [];
     const docsPath = path.join(process.cwd(), 'public', 'docs');
@@ -61,6 +68,9 @@ export async function generateStaticParams() {
     return [];
   }
 }
+
+// 禁用动态参数，只使用 generateStaticParams 生成的静态路径
+export const dynamicParams = false;
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
