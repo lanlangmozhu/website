@@ -77,19 +77,50 @@ export default function RootLayout({
           src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" 
           strategy="afterInteractive"
         />
-        <Script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js" strategy="afterInteractive" />
-        <Script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js" strategy="afterInteractive" />
-        <Script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/css.min.js" strategy="afterInteractive" />
-        <Script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js" strategy="afterInteractive" />
-        <Script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js" strategy="afterInteractive" />
-        <Script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js" strategy="afterInteractive" />
-        <Script id="hljs-config" strategy="afterInteractive">
-          {`
-            if (typeof window !== 'undefined' && window.hljs) {
-              window.hljs.configure({ ignoreUnescapedHTML: true });
-            }
-          `}
-        </Script>
+        <Script 
+          src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js" 
+          strategy="afterInteractive" 
+        />
+        <Script 
+          src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js" 
+          strategy="afterInteractive" 
+        />
+        <Script 
+          src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/css.min.js" 
+          strategy="afterInteractive" 
+        />
+        <Script 
+          src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js" 
+          strategy="afterInteractive" 
+        />
+        <Script 
+          src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js" 
+          strategy="afterInteractive" 
+        />
+        <Script 
+          src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js" 
+          strategy="afterInteractive" 
+        />
+        {/* Highlight.js 配置脚本 - 在库加载后执行 */}
+        <Script 
+          id="hljs-config" 
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                function configureHljs() {
+                  if (typeof window !== 'undefined' && window.hljs) {
+                    window.hljs.configure({ ignoreUnescapedHTML: true });
+                  } else {
+                    // 如果库还没加载，等待一下再试
+                    setTimeout(configureHljs, 100);
+                  }
+                }
+                configureHljs();
+              })();
+            `,
+          }}
+        />
         
         <HljsLoader />
         <Providers>
