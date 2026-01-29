@@ -16,7 +16,6 @@ dist-ssr
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
@@ -31,6 +30,38 @@ coverage
 # Next.js
 .next
 out
+
+# TypeScript
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# Build artifacts and temporary files
+*.tmp
+*.temp
+*.cache
+.turbo
+.swc
+
+# macOS
+.DS_Store
+**/.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+.Trash-*
 
 # Environment variables
 .env
