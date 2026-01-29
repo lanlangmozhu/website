@@ -30,9 +30,9 @@ export const GA_MEASUREMENT_ID = "G-XXXXXXXXXX";
 // Dynamic Navigation Configuration
 // To add a new docs folder, just add an entry here and update locales.ts
 export const NAV_CONFIG: NavConfigItem[] = [
-  { key: 'blog', path: '/blog', folder: 'blog', titleKey: 'nav.blog' },
-  { key: 'practice', path: '/practice', folder: 'practice', titleKey: 'nav.practice' },
-  { key: 'ai', path: '/ai', folder: 'ai', titleKey: 'nav.ai' },
+  { key: 'blog', path: '/blog/', folder: 'blog', titleKey: 'nav.blog' },
+  { key: 'practice', path: '/practice/', folder: 'practice', titleKey: 'nav.practice' },
+  { key: 'ai', path: '/ai/', folder: 'ai', titleKey: 'nav.ai' },
 ];
 
 // QR Code Images Configuration

@@ -159,9 +159,9 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                         );
                     })}
                     <Link 
-                        href="/about" 
+                        href="/about/" 
                         className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 ${
-                            pathname === '/about'
+                            pathname === '/about' || pathname === '/about/'
                             ? 'text-gray-900 dark:text-white bg-white dark:bg-white/10 shadow-sm font-semibold' 
                             : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-white/5'
                         }`}
@@ -243,7 +243,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                         </button>
                     ) : (
                         <Link 
-                            href="/login" 
+                            href="/login/" 
                             className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-100/80 dark:hover:bg-white/8 transition-all duration-300 ease-out border border-transparent hover:border-gray-200 dark:hover:border-white/5 active:bg-gray-100/60 dark:active:bg-white/6"
                             title="Login"
                         >
@@ -295,14 +295,14 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                     </Link>
                 ))}
                  <Link 
-                    href="/about" 
+                    href="/about/" 
                     className="block px-4 py-3.5 rounded-2xl text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-primary dark:hover:text-white transition-all active:bg-gray-100 dark:active:bg-white/10"
                  >
                     {t('nav.about')}
                  </Link>
                  {!user && (
                     <Link 
-                        href="/login"
+                        href="/login/"
                         className="block px-4 py-3.5 rounded-2xl text-base font-medium text-primary bg-primary/5 mt-4 active:bg-primary/10"
                     >
                         登录 / 注册

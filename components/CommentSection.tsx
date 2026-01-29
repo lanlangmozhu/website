@@ -116,7 +116,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ slug }) => {
                 {t('comment.joinDesc')}
             </p>
             <Link 
-                href="/login" 
+                href="/login/" 
                 className="inline-flex items-center gap-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-8 py-3 rounded-xl font-bold hover:scale-105 transition-transform shadow-lg hover:shadow-xl"
             >
                 {t('comment.loginNow')} <Monitor size={16} />

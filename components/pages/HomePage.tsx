@@ -91,7 +91,7 @@ export const HomePage: React.FC = () => {
             </Link>
           ))}
           
-          <Link href="/about" className="group relative flex flex-col items-center p-4 lg:p-8 rounded-xl lg:rounded-[2rem] bg-white/60 dark:bg-gray-900/40 border border-gray-200/50 dark:border-white/5 hover:border-yellow-500/30 dark:hover:border-yellow-500/30 backdrop-blur-md shadow-sm hover:shadow-2xl hover:shadow-yellow-500/10 hover:-translate-y-2 transition-all duration-500 overflow-hidden">
+          <Link href="/about/" className="group relative flex flex-col items-center p-4 lg:p-8 rounded-xl lg:rounded-[2rem] bg-white/60 dark:bg-gray-900/40 border border-gray-200/50 dark:border-white/5 hover:border-yellow-500/30 dark:hover:border-yellow-500/30 backdrop-blur-md shadow-sm hover:shadow-2xl hover:shadow-yellow-500/10 hover:-translate-y-2 transition-all duration-500 overflow-hidden">
                <div className="p-2.5 lg:p-5 rounded-lg lg:rounded-2xl mb-3 lg:mb-6 bg-yellow-50 dark:bg-yellow-500/10 text-yellow-500 group-hover:text-yellow-600 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 ring-1 ring-inset ring-black/5 dark:ring-white/5">
                     <div className="scale-75 lg:scale-100">
                         <User size={32} />
@@ -110,7 +110,7 @@ export const HomePage: React.FC = () => {
                 </div>
                 <h2 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight">{t('home.latestUpdates')}</h2>
             </div>
-            <Link href="/blog" className="group flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-white transition-colors bg-gray-100 dark:bg-white/5 px-4 py-2 rounded-full">
+            <Link href="/blog/" className="group flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-white transition-colors bg-gray-100 dark:bg-white/5 px-4 py-2 rounded-full">
                 {t('home.viewAll')} <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
             </Link>
         </div>
