@@ -196,15 +196,16 @@ jobs:
           # 检查 out 目录是否存在
           if [ -d "out" ]; then
             echo "✅ Found out directory"
-            ls -la out/ | head -10
+            echo "📁 Contents of out/:"
+            ls -la out/ | head -20
           elif [ -f "index.html" ]; then
             echo "⚠️  Artifact files are in root directory, creating out/ structure..."
             mkdir -p out
             # 移动所有静态文件到 out 目录
-            find . -maxdepth 1 -type f \( -name "*.html" -o -name "*.txt" -o -name "*.json" \) -exec mv {} out/ \;
-            [ -d "_next" ] && mv _next out/ || true
-            [ -d "docs" ] && mv docs out/ || true
-            [ -d "post" ] && mv post out/ || true
+            find . -maxdepth 1 -type f \( -name "*.html" -o -name "*.txt" -o -name "*.json" -o -name "*.xml" -o -name "*.pdf" \) ! -name ".gitignore" -exec mv {} out/ \;
+            for dir in _next docs post about ai auth blog images login practice 404; do
+              [ -d "$dir" ] && mv "$dir" out/ || true
+            done
             echo "✅ Reorganized files into out/ directory"
           else
             echo "❌ Build artifacts not found"
@@ -224,8 +225,31 @@ jobs:
             ls -la out/ | head -20
             exit 1
           fi
+          
+          # 检查所有必需的目录
+          echo "🔍 Verifying required directories in artifacts..."
+          REQUIRED_DIRS=("about" "ai" "auth" "blog" "docs" "images" "login" "post" "practice" "404" "_next")
+          MISSING_DIRS=()
+          for dir in "${REQUIRED_DIRS[@]}"; do
+            if [ -d "out/$dir" ]; then
+              FILE_COUNT=$(find "out/$dir" -type f | wc -l)
+              echo "  ✅ out/$dir ($FILE_COUNT files)"
+            else
+              echo "  ❌ out/$dir (missing)"
+              MISSING_DIRS+=("$dir")
+            fi
+          done
+          
+          if [ ${#MISSING_DIRS[@]} -gt 0 ]; then
+            echo "❌ Missing directories in artifacts: ${MISSING_DIRS[*]}"
+            echo "📋 All directories in out/:"
+            ls -la out/
+            exit 1
+          fi
+          
           echo "✅ Build artifacts verified - Static files ready for deployment"
           echo "📊 Files count in out/: $(find out -type f | wc -l)"
+          echo "📊 Directories count in out/: $(find out -type d | wc -l)"
 
       - name: Prepare deployment directory
         uses: appleboy/ssh-action@master
@@ -257,38 +281,67 @@ jobs:
 
       - name: List files before deployment
         run: |
-          echo "📦 Files to deploy from out/:"
-          find out -type f | head -30
+          echo "📦 Preparing deployment..."
           echo "📁 Directories to deploy:"
           ls -la out/ | head -20
           echo "📊 Total files: $(find out -type f | wc -l)"
           echo "📊 Total directories: $(find out -type d | wc -l)"
-          echo "🔍 Checking key directories:"
+          echo "🔍 Final check - key directories and files:"
           for dir in blog ai practice about login auth 404; do
             if [ -d "out/$dir" ]; then
-              echo "  ✅ out/$dir ($(find out/$dir -type f | wc -l) files)"
+              FILE_COUNT=$(find "out/$dir" -type f | wc -l)
+              echo "  ✅ out/$dir ($FILE_COUNT files)"
               if [ -f "out/$dir/index.html" ]; then
                 echo "     ✅ index.html exists"
               else
                 echo "     ❌ index.html missing"
               fi
             else
-              echo "  ❌ out/$dir (missing)"
+              echo "  ❌ out/$dir (missing) - DEPLOYMENT WILL FAIL"
             fi
           done
+          echo "📋 Sample files in out/:"
+          find out -type f | head -20
 
-      - name: Deploy static files to Baota Panel
+      - name: Create deployment archive
+        run: |
+          echo "📦 Creating tar archive from out/ directory..."
+          cd out
+          tar czf ../deploy.tar.gz .
+          cd ..
+          echo "✅ Archive created: $(ls -lh deploy.tar.gz | awk '{print $5}')"
+          echo "📊 Archive contents preview:"
+          tar tzf deploy.tar.gz | head -30
+          
+      - name: Transfer archive to server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
-          source: "out/"
-          target: ${{ secrets.DEPLOY_PATH || '/www/wwwroot/lanlangmozhu.com' }}
-          strip_components: 1
+          source: "deploy.tar.gz"
+          target: "/tmp/"
           rm: false
           overwrite: true
+          
+      - name: Extract and deploy files
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script: |
+            DEPLOY_PATH="${{ secrets.DEPLOY_PATH || '/www/wwwroot/lanlangmozhu.com' }}"
+            echo "📦 Extracting files to $DEPLOY_PATH..."
+            cd $DEPLOY_PATH
+            tar xzf /tmp/deploy.tar.gz
+            rm -f /tmp/deploy.tar.gz
+            echo "✅ Files extracted successfully"
+            echo "📁 Deployed directories:"
+            ls -la | head -20
+            echo "📊 File count: $(find . -type f | wc -l)"
 
       - name: Set correct permissions
         uses: appleboy/ssh-action@master

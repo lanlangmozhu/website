@@ -14,7 +14,9 @@
     "test:run": "vitest run",
     "process-article": "tsx scripts/process-article.ts",
     "generate-rss": "tsx scripts/generate-rss.ts",
-    "clean:index-txt": "tsx scripts/clean-index-txt.ts"
+    "clean:index-txt": "tsx scripts/clean-index-txt.ts",
+    "test:build": "bash scripts/test-build-local.sh",
+    "test:deploy": "bash scripts/test-deploy-local.sh"
   },
   "dependencies": {
     "@fingerprintjs/fingerprintjs": "^4.2.0",
