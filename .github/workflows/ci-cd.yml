@@ -205,7 +205,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
-          source: "out/*"
+          source: "out/"
           target: ${{ secrets.DEPLOY_PATH || '/www/wwwroot/lanlangmozhu.com' }}
           strip_components: 1
           rm: false
