@@ -242,14 +242,40 @@ jobs:
             # 清理旧文件（只删除静态文件，保留其他重要文件）
             if [ -d "$DEPLOY_PATH" ]; then
               echo "🧹 Cleaning old static files..."
-              # 删除旧的 HTML、JS、CSS 等静态文件，但保留 .htaccess、robots.txt 等配置文件
-              find $DEPLOY_PATH -maxdepth 1 -type f \( -name "*.html" -o -name "*.txt" -o -name "*.json" \) -delete 2>/dev/null || true
-              # 删除旧的 _next 和 post 目录（如果存在）
-              [ -d "$DEPLOY_PATH/_next" ] && rm -rf "$DEPLOY_PATH/_next" || true
-              [ -d "$DEPLOY_PATH/post" ] && rm -rf "$DEPLOY_PATH/post" || true
-              [ -d "$DEPLOY_PATH/docs" ] && rm -rf "$DEPLOY_PATH/docs" || true
+              # 删除旧的 HTML、JS、CSS 等静态文件，但保留 .htaccess、.user.ini 等配置文件
+              find $DEPLOY_PATH -maxdepth 1 -type f \( -name "*.html" -o -name "*.txt" -o -name "*.json" -o -name "*.xml" -o -name "*.pdf" \) ! -name ".htaccess" ! -name ".user.ini" -delete 2>/dev/null || true
+              # 删除所有 Next.js 生成的目录
+              echo "🗑️  Removing old Next.js directories..."
+              for dir in about ai auth blog docs images login post practice 404 _next; do
+                if [ -d "$DEPLOY_PATH/$dir" ]; then
+                  rm -rf "$DEPLOY_PATH/$dir"
+                  echo "  ✅ Removed: $dir"
+                fi
+              done
               echo "✅ Old files cleaned"
             fi
+
+      - name: List files before deployment
+        run: |
+          echo "📦 Files to deploy from out/:"
+          find out -type f | head -30
+          echo "📁 Directories to deploy:"
+          ls -la out/ | head -20
+          echo "📊 Total files: $(find out -type f | wc -l)"
+          echo "📊 Total directories: $(find out -type d | wc -l)"
+          echo "🔍 Checking key directories:"
+          for dir in blog ai practice about login auth 404; do
+            if [ -d "out/$dir" ]; then
+              echo "  ✅ out/$dir ($(find out/$dir -type f | wc -l) files)"
+              if [ -f "out/$dir/index.html" ]; then
+                echo "     ✅ index.html exists"
+              else
+                echo "     ❌ index.html missing"
+              fi
+            else
+              echo "  ❌ out/$dir (missing)"
+            fi
+          done
 
       - name: Deploy static files to Baota Panel
         uses: appleboy/scp-action@master
@@ -296,20 +322,53 @@ jobs:
               exit 1
             fi
             
-            # 检查文件数量（至少应该有 index.html 和 _next 目录）
-            FILE_COUNT=$(find . -type f | wc -l)
-            echo "📊 Deployed files count: $FILE_COUNT"
+            # 检查必需的目录
+            echo "📁 Checking required directories..."
+            REQUIRED_DIRS=("about" "ai" "auth" "blog" "docs" "images" "login" "post" "practice" "404" "_next")
+            MISSING_DIRS=()
+            for dir in "${REQUIRED_DIRS[@]}"; do
+              if [ -d "$dir" ]; then
+                echo "  ✅ $dir/"
+                # 检查目录中是否有文件
+                FILE_COUNT=$(find "$dir" -type f | wc -l)
+                echo "     Files: $FILE_COUNT"
+              else
+                echo "  ❌ $dir/ (missing)"
+                MISSING_DIRS+=("$dir")
+              fi
+            done
             
-            # 显示部署的文件列表（前10个）
-            echo "📁 Deployed files (first 10):"
-            find . -type f | head -10
-            
-            # 检查 _next 目录（Next.js 静态资源）
-            if [ -d "_next" ]; then
-              echo "✅ Next.js static assets (_next/) found"
-            else
-              echo "⚠️  Warning: _next directory not found"
+            if [ ${#MISSING_DIRS[@]} -gt 0 ]; then
+              echo "❌ Missing directories: ${MISSING_DIRS[*]}"
+              echo "📋 Current directory structure:"
+              ls -la
+              exit 1
             fi
+            
+            # 检查关键页面文件
+            echo "📄 Checking key page files..."
+            KEY_PAGES=("blog/index.html" "ai/index.html" "practice/index.html" "about/index.html" "login/index.html")
+            MISSING_PAGES=()
+            for page in "${KEY_PAGES[@]}"; do
+              if [ -f "$page" ]; then
+                echo "  ✅ $page"
+              else
+                echo "  ❌ $page (missing)"
+                MISSING_PAGES+=("$page")
+              fi
+            done
+            
+            if [ ${#MISSING_PAGES[@]} -gt 0 ]; then
+              echo "❌ Missing page files: ${MISSING_PAGES[*]}"
+              exit 1
+            fi
+            
+            # 检查文件数量
+            FILE_COUNT=$(find . -type f | wc -l)
+            DIR_COUNT=$(find . -type d | wc -l)
+            echo "📊 Deployment statistics:"
+            echo "  Total files: $FILE_COUNT"
+            echo "  Total directories: $DIR_COUNT"
             
             echo "✅ Deployment verification successful!"
 
