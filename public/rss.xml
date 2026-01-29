@@ -5,9 +5,352 @@
     <link>https://lanlangmozhu.com</link>
     <description>NO BUG, NO CODE</description>
     <language>zh-CN</language>
-    <lastBuildDate>Thu, 29 Jan 2026 03:05:00 GMT</lastBuildDate>
-    <pubDate>Thu, 29 Jan 2026 03:05:00 GMT</pubDate>
+    <lastBuildDate>Thu, 29 Jan 2026 03:07:40 GMT</lastBuildDate>
+    <pubDate>Thu, 29 Jan 2026 03:07:40 GMT</pubDate>
     <ttl>60</ttl>
     <atom:link href="https://lanlangmozhu.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>PWA</title>
+      <link>https://lanlangmozhu.com/post/pwa</link>
+      <description>PWA APP manifest service worker web push</description>
+      <pubDate>Thu, 18 Dec 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/pwa</guid>
+      <category>blog</category>
+    </item>
+    <item>
+      <title>Promise</title>
+      <link>https://lanlangmozhu.com/post/promise</link>
+      <description>promise promise async/await generator 遍历器 iterator 迭代器 promise 中断</description>
+      <pubDate>Thu, 18 Dec 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/promise</guid>
+      <category>blog</category>
+    </item>
+    <item>
+      <title>es6</title>
+      <link>https://lanlangmozhu.com/post/es6</link>
+      <description>ES6 (ECMAScript 2015) 核心特性 ES6（ECMAScript 2015）是 JavaScript 语言的一次重大更新，引入了许多新特性，极大地提升了 JavaScript 的开发体验和表达能力。本文将介绍 ES6 中最重要和最常用的特性。 1. 变量声明：let 和 const ES6 引入了 和 关键字，解决了 的一些问题： let: 块级作用域变量，不存在变量提升...</description>
+      <pubDate>Thu, 18 Dec 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/es6</guid>
+      <category>blog</category>
+    </item>
+    <item>
+      <title>ts-zod</title>
+      <link>https://lanlangmozhu.com/post/ts-zod</link>
+      <description>ts+zod 快速进阶与最佳实践 前提 在 AI 开发(特别是 LLM 应用)中，面临的最大挑战是“非确定性”。TypeScript 和 Zod 是解决这种非确定性的具体方案:</description>
+      <pubDate>Thu, 18 Dec 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/ts-zod</guid>
+      <category>blog</category>
+    </item>
+    <item>
+      <title>webpack打包流程</title>
+      <link>https://lanlangmozhu.com/post/webpack%E6%89%93%E5%8C%85%E6%B5%81%E7%A8%8B</link>
+      <description>1. 打包流程不要回答错 2. 不断的往自己的项目上面去靠拢</description>
+      <pubDate>Thu, 18 Dec 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/webpack%E6%89%93%E5%8C%85%E6%B5%81%E7%A8%8B</guid>
+      <category>blog</category>
+    </item>
+    <item>
+      <title>websocket</title>
+      <link>https://lanlangmozhu.com/post/websocket</link>
+      <description>WebSocket 实时通信技术 WebSocket 是一种在单个 TCP 连接上进行全双工通信的协议，它允许服务器主动向客户端推送数据，实现了真正的实时双向通信。相比传统的 HTTP 轮询方式，WebSocket 具有更低的延迟和更高的效率。 WebSocket 的优势 1. 实时性: 服务器可以主动推送数据，无需客户端轮询 2. 低延迟: 建立连接后，数据传输延迟极低 3. 减少带宽:...</description>
+      <pubDate>Thu, 18 Dec 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/websocket</guid>
+      <category>blog</category>
+    </item>
+    <item>
+      <title>事件循环机制</title>
+      <link>https://lanlangmozhu.com/post/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%9C%BA%E5%88%B6</link>
+      <description>任务队列 事件监听</description>
+      <pubDate>Thu, 18 Dec 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%9C%BA%E5%88%B6</guid>
+      <category>blog</category>
+    </item>
+    <item>
+      <title>什么是跨域</title>
+      <link>https://lanlangmozhu.com/post/%E4%BB%80%E4%B9%88%E6%98%AF%E8%B7%A8%E5%9F%9F</link>
+      <description>跨域 同源策略 协议 域名/主机 端口</description>
+      <pubDate>Thu, 18 Dec 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/%E4%BB%80%E4%B9%88%E6%98%AF%E8%B7%A8%E5%9F%9F</guid>
+      <category>blog</category>
+    </item>
+    <item>
+      <title>兼容</title>
+      <link>https://lanlangmozhu.com/post/%E5%85%BC%E5%AE%B9</link>
+      <description>##什么是兼容 ###网站兼容方式 优雅降级 渐进增强 浏览器异常兼容 低版本浏览器异常兼容 websocket 不同浏览器 api 异常兼容 addeventlister webs</description>
+      <pubDate>Thu, 18 Dec 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/%E5%85%BC%E5%AE%B9</guid>
+      <category>blog</category>
+    </item>
+    <item>
+      <title>内存泄露</title>
+      <link>https://lanlangmozhu.com/post/%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2</link>
+      <description>内存泄露 有遗留 -》 内容溢出 程序中使用后的内存未被释放或者无法释放 1. 垃圾回收机制 标记清除法 引用计数 2. 执行上下文 方式</description>
+      <pubDate>Thu, 18 Dec 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2</guid>
+      <category>blog</category>
+    </item>
+    <item>
+      <title>微前端</title>
+      <link>https://lanlangmozhu.com/post/%E5%BE%AE%E5%89%8D%E7%AB%AF</link>
+      <description>微前端 什么是微前端？ 微前端能解决什么问题？ 1. 巨石应用 2. 老项目 微前端有哪些技术方案？ 1. nginx路由转发 2. iframe嵌套</description>
+      <pubDate>Thu, 18 Dec 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/%E5%BE%AE%E5%89%8D%E7%AB%AF</guid>
+      <category>blog</category>
+    </item>
+    <item>
+      <title>数据类型转换规则</title>
+      <link>https://lanlangmozhu.com/post/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E8%A7%84%E5%88%99</link>
+      <description>隐式转换</description>
+      <pubDate>Thu, 18 Dec 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E8%A7%84%E5%88%99</guid>
+      <category>blog</category>
+    </item>
+    <item>
+      <title>类型判断</title>
+      <link>https://lanlangmozhu.com/post/%E7%B1%BB%E5%9E%8B%E5%88%A4%E6%96%AD</link>
+      <description>类型判断 typeof instanceof Object.prototype.toString.call()</description>
+      <pubDate>Thu, 18 Dec 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/%E7%B1%BB%E5%9E%8B%E5%88%A4%E6%96%AD</guid>
+      <category>blog</category>
+    </item>
+    <item>
+      <title>编码转码与 url</title>
+      <link>https://lanlangmozhu.com/post/%E7%BC%96%E7%A0%81%E8%BD%AC%E7%A0%81%E4%B8%8E-url</link>
+      <description>编码方式 1. escape() 除 ASCII字母，数字，标点符号“@*_+-./f” 外，编码 2. encodeURL() 除常见符号</description>
+      <pubDate>Thu, 18 Dec 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/%E7%BC%96%E7%A0%81%E8%BD%AC%E7%A0%81%E4%B8%8E-url</guid>
+      <category>blog</category>
+    </item>
+    <item>
+      <title>跨页面通信</title>
+      <link>https://lanlangmozhu.com/post/%E8%B7%A8%E9%A1%B5%E9%9D%A2%E9%80%9A%E4%BF%A1</link>
+      <description>跨页面通信技术详解 在 Web 开发中，经常需要在不同的页面或标签页之间进行数据通信。本文将介绍几种常用的跨页面通信方案，帮助开发者选择合适的技术实现页面间的数据共享和同步。 1. LocalStorage 事件 LocalStorage 的 事件可以在同源的不同标签页之间进行通信： 优点: 简单易用，浏览器原生支持 缺点: 只能传递字符串，需要手动序列化；不能在同一页面内通信 2....</description>
+      <pubDate>Thu, 18 Dec 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/%E8%B7%A8%E9%A1%B5%E9%9D%A2%E9%80%9A%E4%BF%A1</guid>
+      <category>blog</category>
+    </item>
+    <item>
+      <title>浏览器底层原理</title>
+      <link>https://lanlangmozhu.com/post/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86</link>
+      <description>了解浏览器底层原理，知道浏览器的基石</description>
+      <pubDate>Fri, 21 Nov 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86</guid>
+      <category>Blog</category>
+      <category>知识</category>
+      <category>浏览器</category>
+      <category>底层原理</category>
+    </item>
+    <item>
+      <title>本站功能大揭秘：从 Markdown 到炫酷博客</title>
+      <link>https://lanlangmozhu.com/post/site-features-showcase</link>
+      <description>一文带你了解本站背后的技术原理，演示代码高亮、交互式 Demo、Iframe 嵌入以及自动化构建流程。</description>
+      <pubDate>Tue, 18 Mar 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/site-features-showcase</guid>
+      <category>Blog</category>
+      <category>功能介绍</category>
+      <category>Markdown</category>
+      <category>架构</category>
+      <category>React</category>
+    </item>
+    <item>
+      <title>Iframe 嵌入与 GitHub 项目预览</title>
+      <link>https://lanlangmozhu.com/post/iframe-embed-test</link>
+      <description>无需离开博客，直接在文章中预览 CodePen、StackBlitz 或 GitHub 仓库代码。</description>
+      <pubDate>Tue, 18 Mar 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/iframe-embed-test</guid>
+      <category>Practice</category>
+      <category>测试</category>
+      <category>Iframe</category>
+      <category>GitHub</category>
+    </item>
+    <item>
+      <title>代码高亮与样式渲染测试</title>
+      <link>https://lanlangmozhu.com/post/code-style-test</link>
+      <description>本文用于测试网站的代码块渲染效果，包含多种主流编程语言的语法高亮演示。</description>
+      <pubDate>Mon, 17 Mar 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/code-style-test</guid>
+      <category>Practice</category>
+      <category>测试</category>
+      <category>样式</category>
+      <category>代码高亮</category>
+    </item>
+    <item>
+      <title>网站功能测试：动态文章生成验证</title>
+      <link>https://lanlangmozhu.com/post/test-dynamic-generation</link>
+      <description>这是一篇自动生成的测试文章，用于验证 Next.js 风格的静态文件加载与分类路由功能是否正常工作。</description>
+      <pubDate>Sun, 16 Mar 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/test-dynamic-generation</guid>
+      <category>Blog</category>
+      <category>测试</category>
+      <category>架构</category>
+      <category>React</category>
+    </item>
+    <item>
+      <title>算法技巧：编写对数器与测试用例生成器</title>
+      <link>https://lanlangmozhu.com/post/algorithm-test-generator</link>
+      <description>刷题除了 AC 还能做什么？学会自己编写测试器和对数器，彻底验证算法正确性。</description>
+      <pubDate>Sat, 15 Mar 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/algorithm-test-generator</guid>
+      <category>Blog</category>
+      <category>算法</category>
+      <category>测试器</category>
+      <category>生成器</category>
+      <category>对数器</category>
+    </item>
+    <item>
+      <title>算法基石：常见数据结构回顾</title>
+      <link>https://lanlangmozhu.com/post/algorithm-data-structure</link>
+      <description>数组、链表、栈、队列、树与图，重温计算机科学的核心基石。</description>
+      <pubDate>Wed, 12 Mar 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/algorithm-data-structure</guid>
+      <category>Blog</category>
+      <category>数据结构</category>
+      <category>算法</category>
+      <category>基础</category>
+    </item>
+    <item>
+      <title>前端面试题全解析：核心分类体系总览</title>
+      <link>https://lanlangmozhu.com/post/interview-16-categories</link>
+      <description>建立完整的前端知识体系，从 JS 基础到工程化架构，覆盖面试高频考点。</description>
+      <pubDate>Mon, 10 Mar 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/interview-16-categories</guid>
+      <category>Blog</category>
+      <category>面试</category>
+      <category>职业规划</category>
+      <category>知识体系</category>
+    </item>
+    <item>
+      <title>CSS 面试题：居中与布局</title>
+      <link>https://lanlangmozhu.com/post/interview-css-layout</link>
+      <description>水平垂直居中的N种写法，以及 Flex 和 Grid 的实战应用。</description>
+      <pubDate>Thu, 06 Mar 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/interview-css-layout</guid>
+      <category>Blog</category>
+      <category>面试</category>
+      <category>CSS</category>
+      <category>布局</category>
+    </item>
+    <item>
+      <title>JS 面试题：原型链与继承</title>
+      <link>https://lanlangmozhu.com/post/interview-js-proto</link>
+      <description>彻底搞懂 Prototype、__proto__ 和 Constructor 之间的三角关系。</description>
+      <pubDate>Wed, 05 Mar 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/interview-js-proto</guid>
+      <category>Blog</category>
+      <category>面试</category>
+      <category>JavaScript</category>
+      <category>原型链</category>
+    </item>
+    <item>
+      <title>前端工程师的 AI 转型之路</title>
+      <link>https://lanlangmozhu.com/post/frontend-ai-transition</link>
+      <description>不要在此刻躺平，拥抱 Gemini 与 LangChain，构建下一代 AI 应用。</description>
+      <pubDate>Sat, 01 Mar 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/frontend-ai-transition</guid>
+      <category>AI</category>
+      <category>AI</category>
+      <category>职业规划</category>
+      <category>LLM</category>
+    </item>
+    <item>
+      <title>浏览器知识：从输入 URL 到页面展示</title>
+      <link>https://lanlangmozhu.com/post/knowledge-browser-render</link>
+      <description>全链路解析 DNS 解析、TCP 握手、渲染流程与回流重绘。</description>
+      <pubDate>Tue, 25 Feb 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/knowledge-browser-render</guid>
+      <category>Blog</category>
+      <category>知识</category>
+      <category>浏览器</category>
+      <category>渲染</category>
+    </item>
+    <item>
+      <title>算法笔记：两数之和与 Hash Map</title>
+      <link>https://lanlangmozhu.com/post/two-sum-algorithm</link>
+      <description>重温经典 LeetCode 题目，探讨空间换时间的优化思想。</description>
+      <pubDate>Thu, 20 Feb 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/two-sum-algorithm</guid>
+      <category>Blog</category>
+      <category>算法</category>
+      <category>LeetCode</category>
+      <category>&quot;&quot;Hash Map&quot;&quot;</category>
+    </item>
+    <item>
+      <title>深入理解浏览器事件循环</title>
+      <link>https://lanlangmozhu.com/post/browser-event-loop</link>
+      <description>宏任务、微任务与渲染时机，彻底搞懂 JS 的异步机制。</description>
+      <pubDate>Tue, 18 Feb 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/browser-event-loop</guid>
+      <category>Blog</category>
+      <category>浏览器</category>
+      <category>JavaScript</category>
+      <category>原理</category>
+    </item>
+    <item>
+      <title>GSAP 动画入门与 React 实战 Demo</title>
+      <link>https://lanlangmozhu.com/post/gsap-animation-guide</link>
+      <description>拒绝枯燥的代码粘贴，直接在文章中查看 GSAP 动画与 React 状态管理的交互效果。</description>
+      <pubDate>Wed, 15 Jan 2025 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/gsap-animation-guide</guid>
+      <category>Practice</category>
+      <category>CSS</category>
+      <category>动画</category>
+      <category>GSAP</category>
+      <category>实践</category>
+      <category>Demo</category>
+    </item>
+    <item>
+      <title>从零开始构建低代码平台</title>
+      <link>https://lanlangmozhu.com/post/low-code-exploration</link>
+      <description>拖拽、Schema 生成与组件通信，技术难点全解析。</description>
+      <pubDate>Fri, 20 Dec 2024 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/low-code-exploration</guid>
+      <category>Practice</category>
+      <category>低代码</category>
+      <category>React</category>
+      <category>架构</category>
+    </item>
+    <item>
+      <title>Gemini 3 Pro 使用感受</title>
+      <link>https://lanlangmozhu.com/post/gemini3-pro-%E4%BD%BF%E7%94%A8%E6%84%9F%E5%8F%97</link>
+      <description>Gemini 3 Pro 在 11 月 20 日强势发布，横扫各大 agent 榜单。它真的能听懂你说的话，不需要去强加语言训化。</description>
+      <pubDate>Wed, 20 Nov 2024 00:00:00 GMT</pubDate>
+      <author>小菜权</author>
+      <guid isPermaLink="true">https://lanlangmozhu.com/post/gemini3-pro-%E4%BD%BF%E7%94%A8%E6%84%9F%E5%8F%97</guid>
+      <category>ai</category>
+      <category>AI</category>
+      <category>Gemini</category>
+      <category>Agent</category>
+    </item>
   </channel>
 </rss>
