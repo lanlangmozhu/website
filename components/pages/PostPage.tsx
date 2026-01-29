@@ -6,8 +6,10 @@ import { useRouter } from 'next/navigation';
 import { PostContext, LanguageContext } from '../../app/providers';
 import { MarkdownRenderer } from '../MarkdownRenderer';
 import { CommentSection } from '../CommentSection';
+import { Breadcrumb } from '../Breadcrumb';
 import { useScrollToTop } from '../../utils/hooks';
 import { ArrowLeft, Calendar, Clock, User, Loader2, Share2, Hash, FileText, ArrowUp } from 'lucide-react';
+import { SITE_URL } from '../../constants';
 
 export const PostPage: React.FC<{ slug: string }> = ({ slug }) => {
   const router = useRouter();
@@ -73,10 +75,32 @@ export const PostPage: React.FC<{ slug: string }> = ({ slug }) => {
         </div>
       </div>
 
+      {/* Breadcrumb Navigation */}
+      <Breadcrumb
+        items={[
+          {
+            name: post.category === 'blog' ? '博客' : post.category === 'ai' ? 'AI' : post.category === 'practice' ? '实践' : '分类',
+            url: post.category === 'blog' ? `${SITE_URL}/blog` : `${SITE_URL}/${post.category}`,
+          },
+          {
+            name: post.title,
+            url: `${SITE_URL}/post/${encodeURIComponent(post.slug)}`,
+          },
+        ]}
+      />
+
       {/* Hero Image */}
       {post.image && (
           <div className="w-full h-[300px] sm:h-[500px] rounded-[2rem] overflow-hidden mb-12 shadow-2xl shadow-primary/10 relative group">
-              <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out" />
+              <img 
+                src={post.image} 
+                alt={post.title} 
+                width={1200}
+                height={500}
+                loading="eager"
+                fetchPriority="high"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out" 
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent opacity-80"></div>
               
               <div className="absolute bottom-8 left-8 right-8 animate-slideUp">

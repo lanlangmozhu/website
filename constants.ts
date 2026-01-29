@@ -23,6 +23,7 @@ export type { ThemeContextType, BlogPost };
 
 export const SITE_NAME = "小菜权";
 export const SITE_DESCRIPTION = "NO BUG, NO CODE";
+export const SITE_URL = "https://lanlangmozhu.com";
 
 // Google Analytics Measurement ID (Replace with your actual ID)
 export const GA_MEASUREMENT_ID = "G-XXXXXXXXXX"; 

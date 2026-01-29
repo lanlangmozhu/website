@@ -67,3 +67,10 @@ $RECYCLE.BIN/
 .env
 .env.local
 .env*.local
+
+# SEO 报告文件（自动生成）
+public/seo-report.json
+public/comprehensive-seo-report.json
+
+# 文章备份目录（临时文件）
+public/docs-backup/

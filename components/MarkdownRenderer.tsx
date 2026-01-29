@@ -262,6 +262,32 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) =
         components={{
           code: CodeBlock,
           pre: ({ children }) => <>{children}</>, // Remove default pre wrapper since CodeBlock handles it
+          img: ({ src, alt, ...props }) => {
+            // 确保图片有 alt 属性（SEO 和可访问性）
+            const imageAlt = alt || '文章配图';
+            return (
+              <img
+                src={src}
+                alt={imageAlt}
+                loading="lazy"
+                decoding="async"
+                {...props}
+              />
+            );
+          },
+          a: ({ href, children, ...props }) => {
+            // 外部链接添加 rel="noopener noreferrer"
+            const isExternal = href?.startsWith('http');
+            return (
+              <a
+                href={href}
+                {...(isExternal && { rel: 'noopener noreferrer', target: '_blank' })}
+                {...props}
+              >
+                {children}
+              </a>
+            );
+          },
         }}
       >
         {content}

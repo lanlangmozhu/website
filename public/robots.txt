@@ -1,0 +1,17 @@
+# robots.txt for lanlangmozhu.com
+# 允许所有搜索引擎爬虫访问网站
+
+User-agent: *
+Allow: /
+
+# 禁止爬取以下目录和文件
+Disallow: /api/
+Disallow: /_next/
+Disallow: /*.txt$
+Disallow: /auth/callback/
+
+# Sitemap 位置
+Sitemap: https://lanlangmozhu.com/sitemap.xml
+
+# 爬取延迟（可选，单位：秒）
+# Crawl-delay: 1

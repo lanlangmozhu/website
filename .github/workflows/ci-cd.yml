@@ -111,10 +111,24 @@ jobs:
           echo "📁 docs directory:"
           [ -d "public/docs" ] && echo "✅ Found ($(find public/docs -name '*.md' | wc -l) markdown files)" || echo "⚠️  Not found"
 
+      - name: Run SEO optimization
+        run: |
+          echo "🔍 Running SEO optimization..."
+          echo "📝 This will generate sitemap, RSS, and SEO reports"
+          pnpm optimize:seo || {
+            echo "⚠️  SEO optimization completed with warnings (non-blocking)"
+          }
+        env:
+          NODE_ENV: production
+          SITE_URL: ${{ secrets.SITE_URL || 'https://lanlangmozhu.com' }}
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.SITE_URL || 'https://lanlangmozhu.com' }}
+        continue-on-error: true
+
       - name: Build project
         run: |
           export NODE_ENV=production
           echo "🔨 Building with NODE_ENV=$NODE_ENV"
+          echo "🌐 SITE_URL=${SITE_URL:-未设置，将使用 constants.ts 中的默认值}"
           echo "📦 Running: pnpm build"
           pnpm build || {
             echo "❌ Build failed!"
@@ -129,6 +143,8 @@ jobs:
           }
         env:
           NODE_ENV: production
+          SITE_URL: ${{ secrets.SITE_URL || 'https://lanlangmozhu.com' }}
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.SITE_URL || 'https://lanlangmozhu.com' }}
 
       - name: Check build output
         run: |
@@ -172,6 +188,51 @@ jobs:
             exit 1
           fi
           echo "✅ No index.txt files found (correctly cleaned)"
+          
+          # 验证 SEO 文件（sitemap.xml, robots.txt, rss.xml）
+          echo "🔍 Verifying SEO files..."
+          if [ ! -f "out/sitemap.xml" ]; then
+            echo "❌ Missing out/sitemap.xml"
+            exit 1
+          fi
+          if [ ! -f "out/robots.txt" ]; then
+            echo "❌ Missing out/robots.txt"
+            exit 1
+          fi
+          if [ ! -f "out/rss.xml" ]; then
+            echo "❌ Missing out/rss.xml"
+            exit 1
+          fi
+          
+          # 验证 sitemap.xml 内容
+          SITEMAP_URLS=$(grep -c "<url>" out/sitemap.xml || echo "0")
+          echo "✅ sitemap.xml found (contains $SITEMAP_URLS URLs)"
+          if [ "$SITEMAP_URLS" -lt 5 ]; then
+            echo "⚠️  Warning: sitemap.xml contains very few URLs ($SITEMAP_URLS), may be incomplete"
+          fi
+          
+          # 验证 robots.txt 包含 Sitemap 指令
+          if ! grep -q "Sitemap:" out/robots.txt; then
+            echo "⚠️  Warning: robots.txt missing Sitemap directive"
+          else
+            echo "✅ robots.txt contains Sitemap directive"
+          fi
+          
+          # 检查 SEO 报告文件（如果存在）
+          if [ -f "public/seo-report.json" ]; then
+            echo "📊 SEO report found: public/seo-report.json"
+          fi
+          if [ -f "public/comprehensive-seo-report.json" ]; then
+            echo "📊 Comprehensive SEO report found: public/comprehensive-seo-report.json"
+            # 读取总体得分
+            OVERALL_SCORE=$(grep -o '"overallScore":[0-9]*' public/comprehensive-seo-report.json | grep -o '[0-9]*' || echo "")
+            if [ -n "$OVERALL_SCORE" ]; then
+              echo "   Overall SEO Score: $OVERALL_SCORE/100"
+              if [ "$OVERALL_SCORE" -lt 80 ]; then
+                echo "   ⚠️  Warning: SEO score below 80, consider optimization"
+              fi
+            fi
+          fi
           
           echo "✅ All required directories and files present"
 

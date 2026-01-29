@@ -8,7 +8,7 @@
 import fs from 'fs';
 import path from 'path';
 import { parseFrontmatter } from '../utils/markdown';
-import { SITE_NAME, SITE_DESCRIPTION, NAV_CONFIG } from '../constants';
+import { SITE_NAME, SITE_DESCRIPTION, SITE_URL as CONSTANT_SITE_URL, NAV_CONFIG } from '../constants';
 
 // 加载 .env.local 文件
 function loadEnvLocal() {
@@ -35,8 +35,8 @@ function loadEnvLocal() {
 // 加载环境变量
 loadEnvLocal();
 
-// 站点配置（可以从环境变量读取，或使用默认值）
-const SITE_URL = process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://your-domain.com';
+// 站点配置（优先级：环境变量 > constants.ts > 默认值）
+const SITE_URL = process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || CONSTANT_SITE_URL || 'https://lanlangmozhu.com';
 const SITE_LANGUAGE = 'zh-CN';
 
 const docsPath = path.join(process.cwd(), 'public', 'docs');
@@ -298,9 +298,10 @@ function main() {
   
   try {
     // 检查站点 URL 配置
-    if (SITE_URL === 'https://your-domain.com') {
-      console.warn('⚠️  SITE_URL not configured, using default. Set SITE_URL or NEXT_PUBLIC_SITE_URL environment variable.');
+    if (SITE_URL === 'https://your-domain.com' || !SITE_URL || SITE_URL.includes('your-domain')) {
+      console.warn('⚠️  SITE_URL not properly configured, using default. Set SITE_URL or NEXT_PUBLIC_SITE_URL environment variable, or update constants.ts');
     }
+    console.log(`🌐 Using SITE_URL: ${SITE_URL}`);
     
     const rssXml = generateRSS();
     

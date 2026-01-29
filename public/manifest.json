@@ -1,0 +1,20 @@
+{
+  "name": "小菜权的个人网站",
+  "short_name": "小菜权",
+  "description": "NO BUG, NO CODE - 前端开发技术博客",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["blog", "education", "technology"],
+  "lang": "zh-CN",
+  "dir": "ltr"
+}

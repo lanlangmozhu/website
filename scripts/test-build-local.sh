@@ -92,15 +92,36 @@ fi
 # 检查关键文件
 echo ""
 echo "📄 Key files check:"
-KEY_FILES=("index.html" "posts-list.json" "rss.xml")
+KEY_FILES=("index.html" "posts-list.json" "rss.xml" "sitemap.xml" "robots.txt")
 for file in "${KEY_FILES[@]}"; do
   if [ -f "out/$file" ]; then
-    echo -e "  ${GREEN}✅ out/$file${NC}"
+    FILE_SIZE=$(du -h "out/$file" | cut -f1)
+    echo -e "  ${GREEN}✅ out/$file (${FILE_SIZE})${NC}"
   else
     echo -e "  ${RED}❌ out/$file (missing)${NC}"
     exit 1
   fi
 done
+
+# 验证 SEO 文件内容
+echo ""
+echo "🔍 SEO files content verification:"
+if [ -f "out/sitemap.xml" ]; then
+  SITEMAP_URLS=$(grep -c "<url>" out/sitemap.xml 2>/dev/null || echo "0")
+  if [ "$SITEMAP_URLS" -gt 0 ]; then
+    echo -e "  ${GREEN}✅ sitemap.xml contains $SITEMAP_URLS URLs${NC}"
+  else
+    echo -e "  ${YELLOW}⚠️  sitemap.xml exists but contains no URLs${NC}"
+  fi
+fi
+
+if [ -f "out/robots.txt" ]; then
+  if grep -q "Sitemap:" out/robots.txt; then
+    echo -e "  ${GREEN}✅ robots.txt contains Sitemap directive${NC}"
+  else
+    echo -e "  ${YELLOW}⚠️  robots.txt missing Sitemap directive${NC}"
+  fi
+fi
 
 # 检查关键页面
 echo ""
