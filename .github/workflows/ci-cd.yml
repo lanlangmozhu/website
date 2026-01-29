@@ -182,7 +182,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
-            DEPLOY_PATH="${{ secrets.DEPLOY_PATH || '/www/wwwroot/your-domain.com' }}"
+            DEPLOY_PATH="${{ secrets.DEPLOY_PATH || '/www/wwwroot/lanlangmozhu.com' }}"
             # 确保部署目录存在
             mkdir -p $DEPLOY_PATH
             echo "✅ Deployment directory exists: $DEPLOY_PATH"
@@ -206,7 +206,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
           source: "out/*"
-          target: ${{ secrets.DEPLOY_PATH || '/www/wwwroot/your-domain.com' }}
+          target: ${{ secrets.DEPLOY_PATH || '/www/wwwroot/lanlangmozhu.com' }}
           strip_components: 1
           rm: false
           overwrite: true
@@ -219,7 +219,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
-            cd ${{ secrets.DEPLOY_PATH || '/www/wwwroot/your-domain.com' }}
+            cd ${{ secrets.DEPLOY_PATH || '/www/wwwroot/lanlangmozhu.com' }}
             # 设置文件权限（宝塔面板通常使用 www 用户）
             chown -R www:www . || chown -R $USER:$USER .
             find . -type f -exec chmod 644 {} \;
@@ -234,7 +234,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
-            DEPLOY_PATH="${{ secrets.DEPLOY_PATH || '/www/wwwroot/your-domain.com' }}"
+            DEPLOY_PATH="${{ secrets.DEPLOY_PATH || '/www/wwwroot/lanlangmozhu.com' }}"
             cd $DEPLOY_PATH
             
             # 检查关键文件是否存在
@@ -264,5 +264,5 @@ jobs:
         if: success()
         run: |
           echo "✅ Static website deployed successfully to Baota Panel!"
-          echo "📦 Deployment path: ${{ secrets.DEPLOY_PATH || '/www/wwwroot/your-domain.com' }}"
+          echo "📦 Deployment path: ${{ secrets.DEPLOY_PATH || '/www/wwwroot/lanlangmozhu.com' }}"
 
