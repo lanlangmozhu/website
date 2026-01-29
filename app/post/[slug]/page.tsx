@@ -10,10 +10,22 @@ import { parseFrontmatter } from '../../../utils/markdown';
 export async function generateStaticParams() {
   try {
     // 读取文章列表
-    const postsListPath = path.join(process.cwd(), 'public', 'posts-list.json');
+    const cwd = process.cwd();
+    const postsListPath = path.join(cwd, 'public', 'posts-list.json');
+    
+    // 调试信息（仅在构建时输出）
+    if (process.env.NODE_ENV === 'production') {
+      console.log(`[generateStaticParams] Working directory: ${cwd}`);
+      console.log(`[generateStaticParams] Looking for posts-list.json at: ${postsListPath}`);
+    }
     
     if (!fs.existsSync(postsListPath)) {
-      console.warn('posts-list.json not found, returning empty array');
+      console.warn(`[generateStaticParams] posts-list.json not found at ${postsListPath}, returning empty array`);
+      // 尝试查找文件
+      const altPath = path.join(cwd, 'posts-list.json');
+      if (fs.existsSync(altPath)) {
+        console.warn(`[generateStaticParams] Found posts-list.json at alternative location: ${altPath}`);
+      }
       return [];
     }
 
@@ -29,13 +41,21 @@ export async function generateStaticParams() {
     }
 
     const slugs: { slug: string }[] = [];
-    const docsPath = path.join(process.cwd(), 'public', 'docs');
+    const docsPath = path.join(cwd, 'public', 'docs');
+
+    if (process.env.NODE_ENV === 'production') {
+      console.log(`[generateStaticParams] Docs directory: ${docsPath}`);
+      console.log(`[generateStaticParams] Found ${postsList.length} posts in list`);
+    }
 
     // 遍历所有文章文件，提取 slug
     for (const relativePath of postsList) {
       const filePath = path.join(docsPath, relativePath);
       
       if (!fs.existsSync(filePath)) {
+        if (process.env.NODE_ENV === 'production') {
+          console.warn(`[generateStaticParams] File not found: ${filePath}`);
+        }
         continue;
       }
 
@@ -61,10 +81,13 @@ export async function generateStaticParams() {
       }
     }
 
-    console.log(`✅ Generated ${slugs.length} static params for posts`);
+    if (process.env.NODE_ENV === 'production') {
+      console.log(`✅ [generateStaticParams] Generated ${slugs.length} static params for posts`);
+    }
     return slugs;
   } catch (error) {
-    console.error('Error generating static params:', error);
+    console.error('[generateStaticParams] Error generating static params:', error);
+    // 即使出错也返回空数组，避免构建失败
     return [];
   }
 }

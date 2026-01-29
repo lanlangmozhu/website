@@ -97,8 +97,36 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Verify environment and paths
+        run: |
+          echo "🔍 Environment check:"
+          echo "NODE_ENV: $NODE_ENV"
+          echo "PWD: $(pwd)"
+          echo "📁 Project structure:"
+          ls -la | head -20
+          echo "📁 Public directory:"
+          [ -d "public" ] && ls -la public/ | head -10 || echo "⚠️  public directory not found"
+          echo "📄 posts-list.json:"
+          [ -f "public/posts-list.json" ] && echo "✅ Found" || echo "⚠️  Not found"
+          echo "📁 docs directory:"
+          [ -d "public/docs" ] && echo "✅ Found ($(find public/docs -name '*.md' | wc -l) markdown files)" || echo "⚠️  Not found"
+
       - name: Build project
-        run: pnpm build
+        run: |
+          export NODE_ENV=production
+          echo "🔨 Building with NODE_ENV=$NODE_ENV"
+          echo "📦 Running: pnpm build"
+          pnpm build || {
+            echo "❌ Build failed!"
+            echo "📋 Checking partial build output..."
+            if [ -d "out" ]; then
+              echo "📁 Partial out directory contents:"
+              find out -type f | head -20
+              echo "📁 Directories in out:"
+              ls -la out/ | head -20
+            fi
+            exit 1
+          }
         env:
           NODE_ENV: production
 
@@ -109,6 +137,31 @@ jobs:
             exit 1
           fi
           echo "✅ Build successful - Static files generated in out/"
+          echo "📊 Build statistics:"
+          echo "  Total files: $(find out -type f | wc -l)"
+          echo "  Total directories: $(find out -type d | wc -l)"
+          echo "📁 Required directories check:"
+          REQUIRED_DIRS=("about" "ai" "auth" "blog" "docs" "images" "login" "post" "practice" "404" "_next")
+          MISSING_DIRS=()
+          for dir in "${REQUIRED_DIRS[@]}"; do
+            if [ -d "out/$dir" ]; then
+              echo "  ✅ out/$dir"
+            else
+              echo "  ❌ out/$dir (missing)"
+              MISSING_DIRS+=("$dir")
+            fi
+          done
+          if [ ${#MISSING_DIRS[@]} -gt 0 ]; then
+            echo "❌ Missing directories: ${MISSING_DIRS[*]}"
+            echo "📋 All directories in out/:"
+            ls -la out/
+            exit 1
+          fi
+          if [ ! -f "out/index.html" ]; then
+            echo "❌ Missing out/index.html"
+            exit 1
+          fi
+          echo "✅ All required directories and files present"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4

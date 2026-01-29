@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "tsx scripts/process-article.ts --all && tsx scripts/generate-posts-list.ts && tsx scripts/generate-rss.ts && next build && tsx scripts/clean-index-txt.ts",
+    "build": "NODE_ENV=production tsx scripts/process-article.ts --all && NODE_ENV=production tsx scripts/generate-posts-list.ts && NODE_ENV=production tsx scripts/generate-rss.ts && NODE_ENV=production next build && NODE_ENV=production tsx scripts/clean-index-txt.ts",
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

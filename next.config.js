@@ -1,10 +1,16 @@
 /** @type {import('next').NextConfig} */
+// 强制设置 NODE_ENV（如果未设置）
+if (!process.env.NODE_ENV) {
+  process.env.NODE_ENV = process.env.CI ? 'production' : 'development';
+}
+
 const nextConfig = {
   reactStrictMode: true,
   
   // 静态导出配置（用于宝塔面板等静态网站部署）
   // 只在生产构建时启用静态导出，开发模式使用正常模式
-  ...(process.env.NODE_ENV === 'production' && { 
+  // 强制检查：如果 CI 环境或明确设置了 NODE_ENV=production，则启用静态导出
+  ...((process.env.NODE_ENV === 'production' || process.env.CI === 'true') && { 
     output: 'export',
     distDir: 'out', // 明确指定输出目录为 out
     trailingSlash: true, // 生成 ai/index.html 而不是 ai.html，解决静态部署路由问题
