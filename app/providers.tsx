@@ -44,15 +44,46 @@ const detectBrowserLanguage = (): Language => {
 };
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  // Initialize with safe defaults to avoid hydration mismatch
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  // Initialize theme and language from localStorage immediately (before mount) to prevent FOUC
+  const getInitialTheme = (): boolean => {
+    if (typeof window === 'undefined') return false;
+    try {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') return true;
+      if (savedTheme === 'light') return false;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    } catch {
+      return false;
+    }
+  };
+
+  const getInitialLanguage = (): Language => {
+    if (typeof window === 'undefined') return 'zh';
+    try {
+      const savedLanguage = localStorage.getItem('language') as Language | null;
+      const validLanguages: Language[] = ['zh', 'en', 'jp'];
+      if (savedLanguage && validLanguages.includes(savedLanguage)) {
+        return savedLanguage;
+      }
+      const browserLang = navigator.language.toLowerCase();
+      if (browserLang.startsWith('zh')) return 'zh';
+      if (browserLang.startsWith('ja') || browserLang.startsWith('jp')) return 'jp';
+      return 'en';
+    } catch {
+      return 'zh';
+    }
+  };
+
+  const [isDarkMode, setIsDarkMode] = useState(getInitialTheme);
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loadingPosts, setLoadingPosts] = useState(true);
+  // Always start with 'zh' on both server and client to avoid hydration mismatch
+  // Will be updated after mount if localStorage has a different value
   const [language, setLanguage] = useState<Language>('zh');
   const [mounted, setMounted] = useState(false);
 
   // Helper for translations with support for placeholders
-  const t = (path: string, params?: Record<string, string>) => {
+  const t = (path: string, params?: Record<string, string>): string => {
     const keys = path.split('.');
     let value: any = translations[language];
     for (const key of keys) {
@@ -63,39 +94,32 @@ export function Providers({ children }: { children: React.ReactNode }) {
       }
     }
     
+    // Ensure value is a string
+    if (typeof value !== 'string') {
+      return path;
+    }
+    
     // Replace placeholders if params provided
-    if (params && typeof value === 'string') {
+    if (params) {
       return value.replace(/\{(\w+)\}/g, (match, key) => params[key] || match);
     }
     
     return value;
   };
 
-  // Mark as mounted to avoid hydration mismatch
+  // Mark as mounted and update language from localStorage to avoid hydration mismatch
   useEffect(() => {
     setMounted(true);
-  }, []);
-
-  // Language initialization with persistence and browser detection
-  useEffect(() => {
-    if (!mounted || typeof window === 'undefined') return;
-    
-    const savedLanguage = localStorage.getItem('language') as Language | null;
-    const validLanguages: Language[] = ['zh', 'en', 'jp'];
-    
-    if (savedLanguage && validLanguages.includes(savedLanguage)) {
+    // Update language after mount to match user preference
+    const savedLanguage = getInitialLanguage();
+    if (savedLanguage !== 'zh') {
       setLanguage(savedLanguage);
-    } else {
-      // Detect browser language if no saved preference
-      const detectedLang = detectBrowserLanguage();
-      setLanguage(detectedLang);
-      localStorage.setItem('language', detectedLang);
     }
-  }, [mounted]);
+  }, []);
 
   // Update HTML lang attribute when language changes
   useEffect(() => {
-    if (!mounted || typeof window === 'undefined') return;
+    if (typeof window === 'undefined') return;
     
     const langMap: Record<Language, string> = {
       zh: 'zh-CN',
@@ -104,7 +128,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     };
     
     document.documentElement.lang = langMap[language] || 'zh-CN';
-  }, [language, mounted]);
+  }, [language]);
 
   // Save language preference when it changes
   const handleSetLanguage = (lang: Language) => {
@@ -114,20 +138,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Theme Logic - Only run on client side to avoid hydration mismatch
+  // Sync theme to DOM and localStorage
   useEffect(() => {
-    if (!mounted || typeof window === 'undefined') return;
-    
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-      setIsDarkMode(true);
-    }
-  }, [mounted]);
-
-  useEffect(() => {
-    if (!mounted || typeof window === 'undefined') return;
+    if (typeof window === 'undefined') return;
     
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
@@ -136,7 +149,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       document.documentElement.classList.remove('dark');
       localStorage.setItem('theme', 'light');
     }
-  }, [isDarkMode, mounted]);
+  }, [isDarkMode]);
 
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
 

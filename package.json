@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "tsx scripts/process-article.ts --all && tsx scripts/generate-posts-list.ts && next build",
+    "build": "tsx scripts/process-article.ts --all && tsx scripts/generate-posts-list.ts && tsx scripts/generate-rss.ts && next build",
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -12,7 +12,8 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "test:run": "vitest run",
-    "process-article": "tsx scripts/process-article.ts"
+    "process-article": "tsx scripts/process-article.ts",
+    "generate-rss": "tsx scripts/generate-rss.ts"
   },
   "dependencies": {
     "@fingerprintjs/fingerprintjs": "^4.2.0",

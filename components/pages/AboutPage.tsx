@@ -2,12 +2,16 @@
 
 import React, { useContext, useState, useMemo } from 'react';
 import { LanguageContext, PostContext } from '../../app/providers';
-import { ABOUT_DATA } from '../../constants';
-import { Download, ArrowUpRight, Mail, MessageCircle, Layers, Users, Code, PenTool, Briefcase, Coffee, X, ScanLine, QrCode, Github, Twitter } from 'lucide-react';
+import { ABOUT_DATA, QR_IMAGES } from '../../constants';
+import { translations } from '../../locales';
+import { Download, ArrowUpRight, Mail, MessageCircle, Coffee, ScanLine, QrCode, Github } from 'lucide-react';
+import { WeChatQRModal } from '../WeChatQRModal';
+import { XIcon } from '../icons/XIcon';
+import { renderIcon } from '../../utils/icons';
 import Link from 'next/link';
 
 export const AboutPage: React.FC = () => {
-  const { t } = useContext(LanguageContext);
+  const { t, language } = useContext(LanguageContext);
   const { posts } = useContext(PostContext);
   const [showWechatQR, setShowWechatQR] = useState(false);
 
@@ -38,67 +42,89 @@ export const AboutPage: React.FC = () => {
       };
   }, [posts, t]);
 
-  // Helper to render icons from string keys in constants
-  const renderIcon = (iconKey: string, size: number) => {
-      switch(iconKey) {
-          case 'Layers': return <Layers size={size} />;
-          case 'Users': return <Users size={size} />;
-          case 'Code': return <Code size={size} />;
-          case 'PenTool': return <PenTool size={size} />;
-          case 'Briefcase': return <Briefcase size={size} />;
-          default: return <Code size={size} />;
-      }
-  };
-
-  // TODO: 替换为您真实的二维码图片路径
-  const QR_IMAGES = {
-      wechatContact: 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=xiaocaiquan-contact-id',
-      wechatPay: 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=wechat-pay-url-placeholder',
-      alipay: 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=alipay-url-placeholder'
-  };
 
   return (
     <div className="max-w-6xl mx-auto py-12 sm:py-20 text-gray-900 dark:text-white font-sans relative">
-      
-      {/* Global Overlay for WeChat QR */}
-      {showWechatQR && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fadeIn" onClick={() => setShowWechatQR(false)}>
-              <div className="bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-2xl max-w-sm w-full relative animate-blob" onClick={e => e.stopPropagation()}>
-                  <button onClick={() => setShowWechatQR(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 dark:hover:text-white">
-                      <X size={24} />
-                  </button>
-                  <div className="text-center">
-                      <h3 className="text-xl font-bold mb-4">{t('about.scanAdd')}</h3>
-                      <div className="bg-white p-2 rounded-xl inline-block mb-2 shadow-inner border border-gray-100">
-                          <img src={QR_IMAGES.wechatContact} alt="WeChat QR" className="w-48 h-48 object-contain" />
-                      </div>
-                      <p className="text-sm text-gray-500">ID: xiaocaiquan</p>
-                  </div>
-              </div>
-          </div>
-      )}
+      <WeChatQRModal isOpen={showWechatQR} onClose={() => setShowWechatQR(false)} />
 
       {/* Header Name */}
       <h1 className="text-6xl sm:text-8xl font-black mb-16 tracking-tighter animate-slideUp" style={{ animationDelay: '100ms' }}>{t('siteName')}</h1>
 
       {/* Intro Section - Updated with Rich Links */}
       <div className="mb-20 animate-slideUp" style={{ animationDelay: '200ms' }}>
-        <h2 className="text-sm font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-8">{t('about.intro')}</h2>
+        <h2 className="text-sm font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-8">{t('about.introTitle')}</h2>
         
         <div className="space-y-6 text-xl font-medium leading-relaxed text-gray-800 dark:text-gray-200 prose dark:prose-invert max-w-none">
             <p>
-              目前是一名资深 B 端产品设计师与初级开发者，拥有 {stats.yearsExp} 年行业经验。我致力于打通设计与开发的边界，以"设计工程师"的视角，在云计算、低代码、智能客服等领域沉淀了深厚的实践经验。
+              {t('about.intro.paragraph1', { years: stats.yearsExp.toString() })}
             </p>
             <p>
-              热衷于技术探索，我已构建了 <Link href="/practice" className="text-primary hover:underline decoration-2 underline-offset-4 font-bold">{stats.practiceProjects}+ 个实战项目</Link>，
-              涵盖动画交互、工具库与 <Link href="/ai" className="text-primary hover:underline decoration-2 underline-offset-4 font-bold">AI 应用</Link>。
-              同时，我坚持长期写作，累计输出 <Link href="/blog" className="text-primary hover:underline decoration-2 underline-offset-4 font-bold">{stats.displayWords} 字的技术文章</Link>，
-              分享关于设计系统、工程化思维与 AI 转型的深度思考。
+              {language === 'zh' ? (
+                <>热衷于技术探索，我已构建了 <Link href="/practice" className="text-primary hover:underline decoration-2 underline-offset-4 font-bold">{stats.practiceProjects}+ 个实战项目</Link>，涵盖动画交互、工具库与 <Link href="/ai" className="text-primary hover:underline decoration-2 underline-offset-4 font-bold">AI 应用</Link>。同时，我坚持长期写作，累计输出 <Link href="/blog" className="text-primary hover:underline decoration-2 underline-offset-4 font-bold">{stats.displayWords} 字的技术文章</Link>，分享关于设计系统、工程化思维与 AI 转型的深度思考。</>
+              ) : language === 'en' ? (
+                <>Passionate about technical exploration, I have built <Link href="/practice" className="text-primary hover:underline decoration-2 underline-offset-4 font-bold">{stats.practiceProjects}+ practical projects</Link>, covering animation interactions, tool libraries, and <Link href="/ai" className="text-primary hover:underline decoration-2 underline-offset-4 font-bold">AI applications</Link>. At the same time, I persist in long-term writing, having accumulated <Link href="/blog" className="text-primary hover:underline decoration-2 underline-offset-4 font-bold">{stats.displayWords} words of technical articles</Link>, sharing deep thoughts on design systems, engineering thinking, and AI transformation.</>
+              ) : (
+                <>技術探求に情熱を注ぎ、<Link href="/practice" className="text-primary hover:underline decoration-2 underline-offset-4 font-bold">{stats.practiceProjects}+の実践プロジェクト</Link>を構築しました。アニメーションインタラクション、ツールライブラリ、<Link href="/ai" className="text-primary hover:underline decoration-2 underline-offset-4 font-bold">AIアプリケーション</Link>をカバーしています。同時に、長期の執筆を続け、累計<Link href="/blog" className="text-primary hover:underline decoration-2 underline-offset-4 font-bold">{stats.displayWords}字の技術記事</Link>を出力し、デザインシステム、エンジニアリング思考、AI変革に関する深い思考を共有しています。</>
+              )}
             </p>
             <p>
-              我相信技术不仅是代码，更是解决问题的艺术。你可以关注我的 <a href="https://github.com/xiaocaiquan" target="_blank" rel="noreferrer" className="text-gray-900 dark:text-white border-b border-gray-300 dark:border-gray-600 hover:border-primary hover:text-primary transition-colors">GitHub</a> 查看源码，
-              或者在 <a href="https://juejin.cn" target="_blank" rel="noreferrer" className="text-gray-900 dark:text-white border-b border-gray-300 dark:border-gray-600 hover:border-primary hover:text-primary transition-colors">掘金</a> 上与我交流。欢迎查看下方的作品与经历，寻找共鸣。
+              {language === 'zh' ? (
+                <>我相信技术不仅是代码，更是解决问题的艺术。你可以关注我的 <a href="https://github.com/lanlangmozhu" target="_blank" rel="noreferrer" className="text-gray-900 dark:text-white border-b border-gray-300 dark:border-gray-600 hover:border-primary hover:text-primary transition-colors">GitHub</a> 查看源码，或者在 <a href="https://juejin.cn" target="_blank" rel="noreferrer" className="text-gray-900 dark:text-white border-b border-gray-300 dark:border-gray-600 hover:border-primary hover:text-primary transition-colors">掘金</a> 上与我交流。欢迎查看下方的作品与经历，寻找共鸣。</>
+              ) : language === 'en' ? (
+                <>I believe technology is not just code, but the art of solving problems. You can follow my <a href="https://github.com/lanlangmozhu" target="_blank" rel="noreferrer" className="text-gray-900 dark:text-white border-b border-gray-300 dark:border-gray-600 hover:border-primary hover:text-primary transition-colors">GitHub</a> to view source code, or communicate with me on <a href="https://juejin.cn" target="_blank" rel="noreferrer" className="text-gray-900 dark:text-white border-b border-gray-300 dark:border-gray-600 hover:border-primary hover:text-primary transition-colors">Juejin</a>. Welcome to check out the works and experiences below to find resonance.</>
+              ) : (
+                <>技術は単なるコードではなく、問題解決の芸術だと信じています。<a href="https://github.com/lanlangmozhu" target="_blank" rel="noreferrer" className="text-gray-900 dark:text-white border-b border-gray-300 dark:border-gray-600 hover:border-primary hover:text-primary transition-colors">GitHub</a>でソースコードを確認したり、<a href="https://juejin.cn" target="_blank" rel="noreferrer" className="text-gray-900 dark:text-white border-b border-gray-300 dark:border-gray-600 hover:border-primary hover:text-primary transition-colors">掘金</a>で交流したりできます。下記の作品と経験を確認して、共鳴を見つけてください。</>
+              )}
             </p>
+        </div>
+      </div>
+
+      {/* Technical Stack */}
+      <div className="mb-20 animate-slideUp" style={{ animationDelay: '250ms' }}>
+        <h2 className="text-sm font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-8">{t('about.technicalStack.title')}</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {ABOUT_DATA.technicalStack.map((item) => (
+            <div key={item.key} className="bg-white/60 dark:bg-white/5 rounded-2xl p-6 border border-gray-200/50 dark:border-white/5 backdrop-blur hover:bg-white/80 dark:hover:bg-white/10 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <h3 className="text-base font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${item.color}`}></div>
+                {t(`about.technicalStack.${item.key}.title`)}
+              </h3>
+              <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                {t(`about.technicalStack.${item.key}.description`)}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Education Background */}
+      <div className="mb-20 animate-slideUp" style={{ animationDelay: '260ms' }}>
+        <h2 className="text-sm font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-8">{t('about.education.title')}</h2>
+        <div className="bg-white/60 dark:bg-white/5 rounded-2xl p-8 border border-gray-200/50 dark:border-white/5 backdrop-blur hover:bg-white/80 dark:hover:bg-white/10 transition-all duration-300 hover:shadow-xl">
+          <div className="flex items-start gap-4">
+            <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0 shadow-lg">
+              <span className="text-2xl font-black text-white">{language === 'zh' ? '学' : language === 'en' ? 'E' : '学'}</span>
+            </div>
+            <div className="flex-1">
+              <div className="text-2xl font-black text-gray-900 dark:text-white mb-2">{t('about.education.university')}</div>
+              <div className="text-base text-gray-600 dark:text-gray-400 font-medium">{t('about.education.major')}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Personal Evaluation */}
+      <div className="mb-20 animate-slideUp" style={{ animationDelay: '270ms' }}>
+        <h2 className="text-sm font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-8">{t('about.personalEvaluation.title')}</h2>
+        <div className="bg-gradient-to-br from-amber-50/50 to-orange-50/50 dark:from-orange-900/10 dark:to-amber-900/5 rounded-2xl p-8 border border-amber-100 dark:border-orange-500/10 backdrop-blur">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-900/20 flex items-center justify-center flex-shrink-0">
+              <span className="text-2xl">💭</span>
+            </div>
+            <p className="text-base leading-relaxed text-gray-800 dark:text-gray-200 flex-1">
+              {t('about.personalEvaluation.content')}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -114,7 +140,7 @@ export const AboutPage: React.FC = () => {
 
       {/* Skills Grid */}
       <div className="mb-24 animate-slideUp" style={{ animationDelay: '400ms' }}>
-         <h2 className="text-2xl font-bold mb-8">Core Competencies</h2>
+         <h2 className="text-2xl font-bold mb-8">核心能力</h2>
          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {ABOUT_DATA.skills.map((skill, i) => (
                 <div key={i} className="bg-white/40 dark:bg-white/5 rounded-2xl p-6 border border-gray-200/50 dark:border-white/5 flex flex-col justify-between h-44 group hover:bg-white dark:hover:bg-white/10 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
@@ -131,8 +157,12 @@ export const AboutPage: React.FC = () => {
 
       {/* Experience Timeline */}
       <div className="space-y-16 animate-slideUp mb-24" style={{ animationDelay: '500ms' }}>
-        <h2 className="text-2xl font-bold mb-8">Experience</h2>
-        {ABOUT_DATA.experience.map((exp, i) => (
+        <h2 className="text-2xl font-bold mb-8">{t('about.workExperience')}</h2>
+        {ABOUT_DATA.experience.map((exp, i) => {
+            const workHistory = (translations[language].about as any).workHistory;
+            const companyInfo = workHistory[exp.companyKey as keyof typeof workHistory];
+            
+            return (
             <div key={i} className="grid grid-cols-1 md:grid-cols-4 gap-8 group">
                 <div className="md:col-span-1 pt-1">
                     <div className="flex items-center gap-3 text-gray-400 font-mono text-sm mb-1">
@@ -143,15 +173,15 @@ export const AboutPage: React.FC = () => {
                 <div className="md:col-span-3 space-y-5 border-l-2 border-gray-100 dark:border-white/5 pl-8 md:pl-0 md:border-none">
                     <div>
                         <div className="flex items-center gap-2 text-2xl font-black text-gray-900 dark:text-white">
-                            {exp.company} 
+                            {companyInfo.name} 
                         </div>
-                        <div className="text-primary font-bold text-base mt-1">{exp.role}</div>
+                        <div className="text-primary font-bold text-base mt-1">{companyInfo.role}</div>
                     </div>
                     
-                    {exp.desc && <div className="text-gray-900 dark:text-white font-bold bg-gray-100 dark:bg-white/5 inline-block px-3 py-1 rounded-lg text-sm">{exp.desc}</div>}
+                    {companyInfo.desc && <div className="text-gray-900 dark:text-white font-bold bg-gray-100 dark:bg-white/5 inline-block px-3 py-1 rounded-lg text-sm">{companyInfo.desc}</div>}
 
                     <ul className="space-y-4 text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
-                        {exp.items.map((item, idx) => (
+                        {companyInfo.items.map((item: string, idx: number) => (
                             <li key={idx} className="flex items-start gap-3">
                                 <span className="mt-2.5 w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600 flex-shrink-0"></span>
                                 <span>{item}</span>
@@ -160,7 +190,7 @@ export const AboutPage: React.FC = () => {
                     </ul>
                 </div>
             </div>
-        ))}
+        )})}
       </div>
 
       {/* Compact Footer Section (Sponsor & Contact) */}
@@ -198,11 +228,11 @@ export const AboutPage: React.FC = () => {
                 <h2 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">{t('about.contact')}</h2>
                 <div className="grid grid-cols-1 gap-3">
                     {/* Email */}
-                    <a href="mailto:hi@xiaocaiquan.cn" className="flex items-center gap-3 text-gray-700 dark:text-gray-300 hover:text-primary transition-colors group p-2 rounded-xl hover:bg-white dark:hover:bg-white/5">
+                    <a href="mailto:lanlangmozhu@163.com" className="flex items-center gap-3 text-gray-700 dark:text-gray-300 hover:text-primary transition-colors group p-2 rounded-xl hover:bg-white dark:hover:bg-white/5">
                         <div className="p-2 bg-gray-100 dark:bg-white/5 rounded-lg group-hover:bg-primary/10">
                             <Mail size={16} />
                         </div>
-                        <span className="font-bold text-sm">hi@xiaocaiquan.cn</span>
+                        <span className="font-bold text-sm">lanlangmozhu@163.com</span>
                     </a>
                     
                     {/* WeChat */}
@@ -211,7 +241,7 @@ export const AboutPage: React.FC = () => {
                              <div className="p-2 bg-gray-100 dark:bg-white/5 rounded-lg">
                                 <MessageCircle size={16} />
                             </div>
-                            <span className="font-bold text-sm">xiaocaiquan</span>
+                            <span className="font-bold text-sm">Q</span>
                         </div>
                          <button 
                             onClick={() => setShowWechatQR(true)}
@@ -223,12 +253,12 @@ export const AboutPage: React.FC = () => {
 
                     {/* Social Links */}
                     <div className="flex items-center gap-2 mt-2 pt-2 border-t border-gray-100 dark:border-white/5">
-                        <a href="https://github.com/xiaocaiquan" target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 p-2 rounded-lg bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition-all">
+                        <a href="https://github.com/lanlangmozhu" target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 p-2 rounded-lg bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition-all">
                             <Github size={14} /> GitHub
                         </a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 p-2 rounded-lg bg-gray-100 dark:bg-white/5 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-all">
-                            <Twitter size={14} /> Twitter
-                        </a>
+                        {/* <a href="https://x.com/liu_quan55836" target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 p-2 rounded-lg bg-gray-100 dark:bg-white/5 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-blue-400 transition-all">
+                            <XIcon size={14} /> X
+                        </a> */}
                     </div>
                 </div>
             </div>

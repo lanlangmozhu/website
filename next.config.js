@@ -3,12 +3,13 @@ const nextConfig = {
   reactStrictMode: true,
   
   // 静态导出配置（用于宝塔面板等静态网站部署）
-  output: 'export',
+  // 只在生产构建时启用静态导出，开发模式使用正常模式
+  ...(process.env.NODE_ENV === 'production' && { output: 'export' }),
   
   images: {
     domains: ['api.dicebear.com', 'api.qrserver.com', 'images.unsplash.com', 'picsum.photos'],
     // 静态导出时禁用图片优化（需要 Next.js Image Optimization API）
-    unoptimized: true,
+    unoptimized: process.env.NODE_ENV === 'production',
   },
   
   // 生产环境移除 console（保留 error 和 warn）

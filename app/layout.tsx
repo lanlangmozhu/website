@@ -37,6 +37,32 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" className={`scroll-smooth ${outfit.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <head>
+        {/* Prevent FOUC (Flash of Unstyled Content) - Initialize theme and language before render */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  // Initialize theme
+                  const savedTheme = localStorage.getItem('theme');
+                  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  const isDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+                  if (isDark) {
+                    document.documentElement.classList.add('dark');
+                  }
+                  
+                  // Initialize language
+                  const savedLanguage = localStorage.getItem('language');
+                  const validLanguages = ['zh', 'en', 'jp'];
+                  if (savedLanguage && validLanguages.includes(savedLanguage)) {
+                    const langMap = { zh: 'zh-CN', en: 'en-US', jp: 'ja-JP' };
+                    document.documentElement.lang = langMap[savedLanguage] || 'zh-CN';
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
         {/* Highlight.js Theme - 使用 afterInteractive 策略优化加载 */}
         <link 
           rel="stylesheet" 
@@ -44,7 +70,7 @@ export default function RootLayout({
           media="print"
         />
       </head>
-      <body className={`${outfit.variable} ${jetbrainsMono.variable} font-sans bg-light dark:bg-dark transition-colors duration-300 antialiased selection:bg-primary/30 selection:text-primary-900`}>
+      <body className={`${outfit.variable} ${jetbrainsMono.variable} font-sans bg-light dark:bg-dark transition-colors duration-300 antialiased selection:bg-primary/30 selection:text-primary-900`} suppressHydrationWarning>
         
         {/* Highlight.js Core */}
         <Script 

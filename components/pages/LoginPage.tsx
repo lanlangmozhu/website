@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useContext, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { loginUser, getVisitorId } from '../../services/auth';
+import { authorizeWithPopup, OAuthProvider } from '../../services/oauth';
 import { User, ArrowRight, Sparkles, ShieldCheck, Fingerprint, Github, Command, MessageCircle, Apple, Loader2 } from 'lucide-react';
 import { LanguageContext } from '../../app/providers';
 
@@ -24,10 +25,19 @@ const LoginPageInner: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loadingProvider, setLoadingProvider] = useState<string | null>(null);
   const [deviceId, setDeviceId] = useState<string>('Scanning...');
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     getVisitorId().then(setDeviceId);
-  }, []);
+    
+    // 检查 URL 参数中的错误信息
+    const errorParam = searchParams.get('error');
+    if (errorParam) {
+      setError(decodeURIComponent(errorParam));
+      // 清除 URL 中的错误参数
+      router.replace('/login', { scroll: false });
+    }
+  }, [searchParams, router]);
 
   const performLogin = async (name: string, avatar: string) => {
       setIsSubmitting(true);
@@ -49,34 +59,22 @@ const LoginPageInner: React.FC = () => {
     performLogin(nickname, selectedAvatar);
   };
 
-  const handleSocialLogin = (provider: string) => {
+  const handleSocialLogin = async (provider: OAuthProvider) => {
       setLoadingProvider(provider);
       
-      // Simulate OAuth Network Request
-      setTimeout(() => {
-          let mockName = '';
-          let mockAvatar = '';
-
-          switch(provider) {
-              case 'github':
-                  mockName = 'GitHubUser_' + Math.floor(Math.random() * 1000);
-                  mockAvatar = 'https://api.dicebear.com/9.x/notionists/svg?seed=Felix';
-                  break;
-              case 'apple':
-                  mockName = 'AppleUser_' + Math.floor(Math.random() * 1000);
-                  mockAvatar = 'https://api.dicebear.com/9.x/notionists/svg?seed=Zane';
-                  break;
-              case 'wechat':
-                  mockName = 'WxUser_' + Math.floor(Math.random() * 1000);
-                  mockAvatar = 'https://api.dicebear.com/9.x/notionists/svg?seed=Milo';
-                  break;
-          }
-
-          // Auto-fill and Login
-          setNickname(mockName);
-          setSelectedAvatar(mockAvatar);
-          performLogin(mockName, mockAvatar);
-      }, 1500);
+      try {
+          // 所有 provider 都使用弹出窗口进行 OAuth 授权
+          const userInfo = await authorizeWithPopup(provider);
+          
+          // 使用 OAuth 返回的用户信息进行登录
+          const avatar = userInfo.avatar || selectedAvatar;
+          await performLogin(userInfo.nickname, avatar);
+      } catch (error) {
+          console.error(`${provider} 授权失败:`, error);
+          setLoadingProvider(null);
+          // 可以在这里添加错误提示
+          alert(error instanceof Error ? error.message : `${provider} 授权失败，请重试`);
+      }
   };
 
   return (
@@ -97,12 +95,19 @@ const LoginPageInner: React.FC = () => {
           </p>
         </div>
 
+        {/* Error Message */}
+        {error && (
+          <div className="mb-6 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-sm text-red-600 dark:text-red-400">
+            {error}
+          </div>
+        )}
+
         {/* Social Login Channels */}
         <div className="grid grid-cols-3 gap-3 mb-8">
             <button 
                 onClick={() => handleSocialLogin('github')}
                 disabled={!!loadingProvider}
-                className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 hover:border-gray-300 dark:hover:border-white/20 transition-all group"
+                className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 hover:border-gray-300 dark:hover:border-white/20 transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 {loadingProvider === 'github' ? <Loader2 size={24} className="animate-spin text-gray-500" /> : <Github size={24} className="text-gray-700 dark:text-white group-hover:scale-110 transition-transform" />}
                 <span className="text-xs font-bold text-gray-500 dark:text-gray-400">GitHub</span>
@@ -110,7 +115,7 @@ const LoginPageInner: React.FC = () => {
             <button 
                 onClick={() => handleSocialLogin('apple')}
                 disabled={!!loadingProvider}
-                className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 hover:border-gray-300 dark:hover:border-white/20 transition-all group"
+                className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 hover:border-gray-300 dark:hover:border-white/20 transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
             >
                  {loadingProvider === 'apple' ? <Loader2 size={24} className="animate-spin text-gray-500" /> : <Apple size={24} className="text-gray-900 dark:text-white group-hover:scale-110 transition-transform" />}
                 <span className="text-xs font-bold text-gray-500 dark:text-gray-400">Apple</span>
@@ -118,7 +123,7 @@ const LoginPageInner: React.FC = () => {
             <button 
                 onClick={() => handleSocialLogin('wechat')}
                 disabled={!!loadingProvider}
-                className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 hover:border-green-200 dark:hover:border-green-500/30 transition-all group"
+                className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 hover:border-green-200 dark:hover:border-green-500/30 transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
             >
                  {loadingProvider === 'wechat' ? <Loader2 size={24} className="animate-spin text-green-500" /> : <MessageCircle size={24} className="text-green-500 group-hover:scale-110 transition-transform" />}
                 <span className="text-xs font-bold text-gray-500 dark:text-gray-400">WeChat</span>

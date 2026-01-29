@@ -10,6 +10,7 @@
 - 🔍 全文搜索
 - 💬 评论系统
 - 🤖 AI 摘要生成
+- 🔐 第三方登录（GitHub、Apple、WeChat）
 
 ## 快速开始
 
@@ -26,6 +27,22 @@ pnpm install
 ```env
 GEMINI_API_KEY=your_gemini_api_key_here
 UNSPLASH_ACCESS_KEY=your_unsplash_access_key_here  # 可选，用于图片搜索
+SITE_URL=https://your-domain.com  # RSS 和站点链接使用，可选
+
+# OAuth 第三方登录配置（可选）
+NEXT_PUBLIC_GITHUB_CLIENT_ID=your_github_client_id
+NEXT_PUBLIC_APPLE_CLIENT_ID=your_apple_client_id
+NEXT_PUBLIC_WECHAT_APP_ID=your_wechat_app_id
+
+# OAuth 回调 URL 基础地址（可选，不设置则使用当前域名）
+# 用于配置线上环境的回调地址，必须与 GitHub OAuth App 中配置的回调 URL 一致
+NEXT_PUBLIC_SITE_URL=https://your-domain.com
+# 或者单独配置 OAuth 回调基础地址
+NEXT_PUBLIC_OAUTH_REDIRECT_BASE_URL=https://your-domain.com
+
+# OAuth 后端 API 地址（用于 token 交换，必须）
+# 由于安全原因，client_secret 不能暴露在前端，需要通过后端 API 处理
+NEXT_PUBLIC_OAUTH_API_URL=https://your-backend-api.com/auth
 ```
 
 ### 运行开发服务器
@@ -100,10 +117,75 @@ image: https://images.unsplash.com/...
 - **AI 生成**：使用 Gemini AI 生成标题、摘要、标签
 - **图片搜索**：从 Unsplash 搜索与文章相关的图片
 
+## RSS 订阅
+
+项目会自动生成 RSS 订阅源 (`/rss.xml`)，包含所有文章的最新更新。
+
+### 生成 RSS
+
+RSS 文件会在构建时自动生成，也可以手动运行：
+
+```bash
+pnpm generate-rss
+```
+
+### 配置站点 URL
+
+为了生成正确的 RSS 链接，请在环境变量中设置站点 URL：
+
+```env
+SITE_URL=https://your-domain.com
+# 或
+NEXT_PUBLIC_SITE_URL=https://your-domain.com
+```
+
+如果不设置，RSS 将使用默认的占位符 URL。
+
+## OAuth 第三方登录
+
+项目支持 GitHub、Apple、WeChat 第三方登录。由于安全原因，OAuth token 交换需要通过后端 API 处理。
+
+### 配置步骤
+
+1. **GitHub OAuth App**
+   - 访问 [GitHub Developer Settings](https://github.com/settings/developers)
+   - 创建新的 OAuth App
+   - **重要**：设置 Authorization callback URL 必须与代码中的 redirect_uri 完全一致
+     - 开发环境：`http://localhost:3000/auth/callback/github`
+     - 生产环境：`https://your-domain.com/auth/callback/github`（需要配置 `NEXT_PUBLIC_SITE_URL` 环境变量）
+   - 获取 Client ID，配置到 `NEXT_PUBLIC_GITHUB_CLIENT_ID`
+   - **注意**：如果回调 URL 不匹配，GitHub 会返回 404 错误
+
+2. **Apple Sign In**
+   - 访问 [Apple Developer](https://developer.apple.com/)
+   - 创建 App ID 并启用 Sign in with Apple
+   - 配置 Service ID 和回调 URL
+   - 获取 Client ID，配置到 `NEXT_PUBLIC_APPLE_CLIENT_ID`
+
+3. **微信开放平台**
+   - 访问 [微信开放平台](https://open.weixin.qq.com/)
+   - 创建网站应用
+   - 设置授权回调域名
+   - 获取 AppID，配置到 `NEXT_PUBLIC_WECHAT_APP_ID`
+
+4. **后端 API**
+   - 需要实现以下 API 端点来处理 token 交换：
+     - `POST /api/auth/github` - 处理 GitHub OAuth
+     - `POST /api/auth/apple` - 处理 Apple Sign In
+     - `POST /api/auth/wechat` - 处理微信 OAuth
+   - 设置 `NEXT_PUBLIC_OAUTH_API_URL` 指向后端 API 地址
+
+### 注意事项
+
+- 由于项目使用静态导出，OAuth 回调页面需要部署在可访问的域名上
+- `client_secret` 和 `app_secret` 绝对不能暴露在前端代码中
+- 建议使用环境变量管理所有敏感配置
+
 ## 项目结构
 
 ```
 ├── app/              # Next.js App Router
+│   └── auth/         # OAuth 回调处理
 ├── components/       # React 组件
 ├── pages/            # 页面组件
 ├── public/
@@ -111,6 +193,7 @@ image: https://images.unsplash.com/...
 ├── services/         # 服务层
 │   ├── data.ts       # 文章加载
 │   ├── auth.ts       # 用户认证
+│   ├── oauth.ts      # OAuth 授权服务
 │   ├── geminiService.ts  # AI 服务
 │   ├── frontmatterService.ts  # Frontmatter 生成
 │   └── unsplashService.ts     # 图片搜索

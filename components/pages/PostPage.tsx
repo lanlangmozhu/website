@@ -1,18 +1,19 @@
 'use client';
 
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { PostContext, LanguageContext } from '../../app/providers';
 import { MarkdownRenderer } from '../MarkdownRenderer';
 import { CommentSection } from '../CommentSection';
+import { useScrollToTop } from '../../utils/hooks';
 import { ArrowLeft, Calendar, Clock, User, Loader2, Share2, Hash, FileText, ArrowUp } from 'lucide-react';
 
 export const PostPage: React.FC<{ slug: string }> = ({ slug }) => {
   const router = useRouter();
   const { posts, loading } = useContext(PostContext);
   const { t } = useContext(LanguageContext);
-  const [showScrollTop, setShowScrollTop] = useState(false);
+  const { showButton: showScrollTop, scrollToTop } = useScrollToTop(400);
   
   // Decode URL-encoded slug (handle both encoded and decoded cases)
   const decodedSlug = slug.includes('%') ? decodeURIComponent(slug) : slug;
@@ -42,24 +43,6 @@ export const PostPage: React.FC<{ slug: string }> = ({ slug }) => {
       // router.push('/'); 
     }
   }, [post, loading, router]);
-
-  // Scroll listener for Back-to-Top button
-  useEffect(() => {
-      const handleScroll = () => {
-          if (window.scrollY > 400) {
-              setShowScrollTop(true);
-          } else {
-              setShowScrollTop(false);
-          }
-      };
-
-      window.addEventListener('scroll', handleScroll);
-      return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToTop = () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   if (loading) {
       return (

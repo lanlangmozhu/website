@@ -29,7 +29,7 @@ export const translations = {
     },
     about: {
       title: '关于我',
-      intro: '介绍',
+      introTitle: '介绍',
       contact: '联系',
       resume: '简历',
       download: '下载',
@@ -53,6 +53,89 @@ export const translations = {
         engineering: '多角色共情，利用工程化思维解决问题',
         experience: '丰富的多端多行业产品设计经验，像素强迫症',
         management: '体验研发团队管理经验，助力产研上下游',
+      },
+      intro: {
+        paragraph1: '目前是一名资深 B 端开发者，拥有 {years} 年行业经验。在小程序、中后台、低代码、AI 应用等领域沉淀了深厚的实践经验。',
+        paragraph2: '热衷于技术探索，我已构建了 {projects}+ 个实战项目，涵盖动画交互、工具库与 AI 应用。同时，我坚持长期写作，累计输出 {words} 字的技术文章，分享关于设计系统、工程化思维与 AI 转型的深度思考。',
+        paragraph3: '我相信技术不仅是代码，更是解决问题的艺术。你可以关注我的 GitHub 查看源码，或者在掘金上与我交流。欢迎查看下方的作品与经历，寻找共鸣。',
+      },
+      technicalStack: {
+        title: '技术栈',
+        coding: {
+          title: '编码能力',
+          description: '拥有扎实的HTML、CSS、JS基础，针对部分前端核心知识有深入研究。熟练掌握TypeScript，在大型项目中能够利用TypeScript进行类型检查和代码优化，提升代码的可维护性和可靠性。',
+        },
+        framework: {
+          title: '框架方面',
+          description: '熟练掌握Vue2/3现代前端框架，理解Vue2/3的核心原理以及差异，拥有Vue开发多个大型项目的开发经验，对Vue的周边生态(Vue Router、Pinia、ElementUI)有一定的使用心得和体会。',
+        },
+        engineering: {
+          title: '工程化方面',
+          description: '熟练掌握Webpack、Vite等前端工程化工具，了解不同工具的核心原理以及差异，针对每种工具能实现自定义构建流程和打包优化。',
+        },
+        client: {
+          title: 'C端开发经验',
+          description: '熟练使用uni-app跨端框架或者原生语法独立开发微信小程序。',
+        },
+        performance: {
+          title: '性能优化',
+          description: '掌握前端常见性能优化手段，包括代码分割、懒加载、资源优化等技术，显著降低FCP和LCP时间，提升用户交互体验。',
+        },
+        backend: {
+          title: '后端能力',
+          description: '熟悉NodeJS以及Express、Koa2、Egg.js等框架，能够设计并实现Restful风格的API，做到前后端分离。',
+        },
+        designPattern: {
+          title: '设计模式',
+          description: '熟悉前端常用设计模式，能够在合适的场景下应用这些模式，提高代码的可维护性和可扩展性。',
+        },
+        algorithm: {
+          title: '数据结构与算法',
+          description: '了解基本的数据结构和算法。',
+        },
+      },
+      education: {
+        title: '教育背景',
+        university: '湖南湘潭大学',
+        major: '计算机科学与技术（本科）',
+      },
+      personalEvaluation: {
+        title: '个人评价',
+        content: '热衷于前端开发领域，不断扩展专业知识库，无论面对何种新兴技术，始终持积极态度，并通过阅读专业书籍、资料以及相关视频，能在一周内快速理解并应用这些技术。',
+      },
+      coreCompetencies: '核心能力',
+      workExperience: '工作经历',
+      workHistory: {
+        company1: {
+          name: '深圳智百威科技发展有限公司',
+          role: '前端开发工程师',
+          desc: '企业级平台项目开发与优化',
+          items: [
+            '负责多个企业级平台项目框架搭建技术选型、核心业务模块开发与维护，确保系统的高效性和稳定性；',
+            '前端性能优化提升用户体验以及平台维护等工作；',
+            '前端公共组件封装、前后端分离开发、接口对接规范及接口联调。',
+          ],
+        },
+        company2: {
+          name: '深圳言信网络科技有限公司',
+          role: '前端开发工程师',
+          desc: '云活动平台开发与优化',
+          items: [
+            '参与现有项目的代码重构，优化前端代码结构和性能；',
+            '负责现有项目的日常维护，修复bug并进行功能优化；',
+            '协助其他成员解决重构过程中的技术难题。',
+          ],
+        },
+        company3: {
+          name: '深圳得程信息有限公司',
+          role: '前端开发工程师',
+          desc: '多端项目开发与维护',
+          items: [
+            '公司自研项目、公司官网、招聘网站、微信小程序功能开发，负责公司多个 h5 活动项目开发；',
+            '负责现有项目的日常维护，修复bug并进行功能优化；',
+            '学习并优化 vr 项目流程，解决项目过程中的技术难题。',
+          ],
+        },
       },
     },
     login: {
@@ -127,7 +210,7 @@ export const translations = {
     },
     about: {
       title: 'About Me',
-      intro: 'Intro',
+      introTitle: 'Introduction',
       contact: 'Contact',
       resume: 'Resume',
       download: 'Download',
@@ -151,6 +234,89 @@ export const translations = {
         engineering: 'Engineering Mindset',
         experience: 'Multi-platform Experience',
         management: 'Team Management',
+      },
+      intro: {
+        paragraph1: 'Currently a senior B-end developer with {years} years of industry experience. I have accumulated deep practical experience in mini-programs, mid-backend systems, low-code platforms, and AI applications.',
+        paragraph2: 'Passionate about technical exploration, I have built {projects}+ practical projects covering animation interactions, tool libraries, and AI applications. At the same time, I persist in long-term writing, having accumulated {words} words of technical articles, sharing deep thoughts on design systems, engineering thinking, and AI transformation.',
+        paragraph3: 'I believe technology is not just code, but the art of solving problems. You can follow my GitHub to view source code, or communicate with me on Juejin. Welcome to check out the works and experiences below to find resonance.',
+      },
+      technicalStack: {
+        title: 'Technical Stack',
+        coding: {
+          title: 'Coding Skills',
+          description: 'Solid foundation in HTML, CSS, and JS, with in-depth research on core frontend knowledge. Proficient in TypeScript, able to leverage TypeScript for type checking and code optimization in large projects, improving code maintainability and reliability.',
+        },
+        framework: {
+          title: 'Framework',
+          description: 'Proficient in Vue2/3 modern frontend frameworks, understanding core principles and differences. Have experience developing multiple large-scale projects with Vue, with insights into Vue ecosystem (Vue Router, Pinia, ElementUI).',
+        },
+        engineering: {
+          title: 'Engineering',
+          description: 'Proficient in frontend engineering tools like Webpack and Vite, understanding core principles and differences. Able to implement custom build processes and packaging optimizations for each tool.',
+        },
+        client: {
+          title: 'Client Development',
+          description: 'Proficient in using uni-app cross-platform framework or native syntax to independently develop WeChat mini-programs.',
+        },
+        performance: {
+          title: 'Performance Optimization',
+          description: 'Master common frontend performance optimization techniques, including code splitting, lazy loading, resource optimization, significantly reducing FCP and LCP times, improving user interaction experience.',
+        },
+        backend: {
+          title: 'Backend Capabilities',
+          description: 'Familiar with NodeJS and frameworks like Express, Koa2, Egg.js, able to design and implement Restful-style APIs, achieving frontend-backend separation.',
+        },
+        designPattern: {
+          title: 'Design Patterns',
+          description: 'Familiar with common frontend design patterns, able to apply these patterns in appropriate scenarios to improve code maintainability and extensibility.',
+        },
+        algorithm: {
+          title: 'Data Structures & Algorithms',
+          description: 'Understanding of basic data structures and algorithms.',
+        },
+      },
+      education: {
+        title: 'Education',
+        university: 'Xiangtan University, Hunan',
+        major: 'Computer Science and Technology (Bachelor)',
+      },
+      personalEvaluation: {
+        title: 'Personal Evaluation',
+        content: 'Passionate about frontend development, continuously expanding professional knowledge base. No matter what emerging technologies I face, I always maintain a positive attitude, and through reading professional books, materials, and related videos, I can quickly understand and apply these technologies within a week.',
+      },
+      coreCompetencies: 'Core Competencies',
+      workExperience: 'Work Experience',
+      workHistory: {
+        company1: {
+          name: 'Shenzhen Zhibaiwei Technology Development Co., Ltd.',
+          role: 'Frontend Developer',
+          desc: 'Enterprise Platform Development & Optimization',
+          items: [
+            'Responsible for framework selection, core business module development and maintenance of multiple enterprise platform projects, ensuring system efficiency and stability;',
+            'Frontend performance optimization to improve user experience and platform maintenance;',
+            'Frontend common component encapsulation, frontend-backend separation development, interface specification and interface integration.',
+          ],
+        },
+        company2: {
+          name: 'Shenzhen Yanxin Network Technology Co., Ltd.',
+          role: 'Frontend Developer',
+          desc: 'Cloud Activity Platform Development & Optimization',
+          items: [
+            'Participated in code refactoring of existing projects, optimizing frontend code structure and performance;',
+            'Responsible for daily maintenance of existing projects, fixing bugs and optimizing functionality;',
+            'Assisted other team members in solving technical challenges during refactoring.',
+          ],
+        },
+        company3: {
+          name: 'Shenzhen Decheng Information Co., Ltd.',
+          role: 'Frontend Developer',
+          desc: 'Multi-platform Project Development & Maintenance',
+          items: [
+            'Developed company self-developed projects, company website, recruitment website, WeChat mini-program features, responsible for multiple H5 activity project development;',
+            'Responsible for daily maintenance of existing projects, fixing bugs and optimizing functionality;',
+            'Learned and optimized VR project processes, solving technical challenges during project development.',
+          ],
+        },
       },
     },
     login: {
@@ -225,7 +391,7 @@ export const translations = {
     },
     about: {
       title: 'プロフィール',
-      intro: '紹介',
+      introTitle: '紹介',
       contact: '連絡先',
       resume: '履歴書',
       download: 'ダウンロード',
@@ -249,6 +415,89 @@ export const translations = {
         engineering: 'エンジニアリング思考',
         experience: 'マルチプラットフォーム',
         management: 'チームマネジメント',
+      },
+      intro: {
+        paragraph1: '現在、{years}年の業界経験を持つシニアBエンド開発者です。ミニプログラム、ミドルバックエンド、ローコード、AIアプリケーションなどの分野で深い実践経験を積んでいます。',
+        paragraph2: '技術探求に情熱を注ぎ、{projects}+の実践プロジェクトを構築しました。アニメーションインタラクション、ツールライブラリ、AIアプリケーションをカバーしています。同時に、長期の執筆を続け、累計{words}字の技術記事を出力し、デザインシステム、エンジニアリング思考、AI変革に関する深い思考を共有しています。',
+        paragraph3: '技術は単なるコードではなく、問題解決の芸術だと信じています。GitHubでソースコードを確認したり、掘金で交流したりできます。下記の作品と経験を確認して、共鳴を見つけてください。',
+      },
+      technicalStack: {
+        title: '技術スタック',
+        coding: {
+          title: 'コーディング能力',
+          description: 'HTML、CSS、JSの基礎がしっかりしており、一部のフロントエンドコア知識について深い研究を行っています。TypeScriptを習得し、大型プロジェクトでTypeScriptを活用して型チェックとコード最適化を行い、コードの保守性と信頼性を向上させることができます。',
+        },
+        framework: {
+          title: 'フレームワーク',
+          description: 'Vue2/3のモダンフロントエンドフレームワークを習得し、Vue2/3のコア原理と違いを理解しています。Vueで複数の大型プロジェクトを開発した経験があり、Vueの周辺エコシステム（Vue Router、Pinia、ElementUI）について一定の使用心得と体験を持っています。',
+        },
+        engineering: {
+          title: 'エンジニアリング',
+          description: 'Webpack、Viteなどのフロントエンドエンジニアリングツールを習得し、異なるツールのコア原理と違いを理解しています。各ツールに対してカスタムビルドプロセスとパッケージング最適化を実現できます。',
+        },
+        client: {
+          title: 'Cエンド開発経験',
+          description: 'uni-appクロスプラットフォームフレームワークまたはネイティブ構文を使用して、WeChatミニプログラムを独立して開発できます。',
+        },
+        performance: {
+          title: 'パフォーマンス最適化',
+          description: 'コード分割、遅延読み込み、リソース最適化などのフロントエンドの一般的なパフォーマンス最適化手段を習得し、FCPとLCP時間を大幅に削減し、ユーザーインタラクション体験を向上させます。',
+        },
+        backend: {
+          title: 'バックエンド能力',
+          description: 'NodeJSおよびExpress、Koa2、Egg.jsなどのフレームワークに精通し、RestfulスタイルのAPIを設計および実装でき、フロントエンドとバックエンドの分離を実現できます。',
+        },
+        designPattern: {
+          title: 'デザインパターン',
+          description: 'フロントエンドの一般的なデザインパターンに精通し、適切なシナリオでこれらのパターンを適用して、コードの保守性と拡張性を向上させることができます。',
+        },
+        algorithm: {
+          title: 'データ構造とアルゴリズム',
+          description: '基本的なデータ構造とアルゴリズムを理解しています。',
+        },
+      },
+      education: {
+        title: '教育背景',
+        university: '湖南湘潭大学',
+        major: 'コンピュータサイエンスと技術（学士）',
+      },
+      personalEvaluation: {
+        title: '個人評価',
+        content: 'フロントエンド開発分野に情熱を注ぎ、専門知識ベースを継続的に拡大しています。どのような新興技術に直面しても、常に積極的な態度を保ち、専門書籍、資料、関連動画を読むことで、1週間以内にこれらの技術を迅速に理解し適用できます。',
+      },
+      coreCompetencies: 'コアコンピテンシー',
+      workExperience: '職歴',
+      workHistory: {
+        company1: {
+          name: '深圳智百威科技発展有限公司',
+          role: 'フロントエンド開発エンジニア',
+          desc: 'エンタープライズプラットフォームプロジェクト開発と最適化',
+          items: [
+            '複数のエンタープライズプラットフォームプロジェクトのフレームワーク構築、技術選定、コアビジネスモジュールの開発と保守を担当し、システムの効率性と安定性を確保；',
+            'フロントエンドパフォーマンス最適化によるユーザー体験の向上およびプラットフォームの保守；',
+            'フロントエンド共通コンポーネントのカプセル化、フロントエンドとバックエンドの分離開発、インターフェース仕様およびインターフェース統合。',
+          ],
+        },
+        company2: {
+          name: '深圳言信ネットワーク科技有限公司',
+          role: 'フロントエンド開発エンジニア',
+          desc: 'クラウドアクティビティプラットフォーム開発と最適化',
+          items: [
+            '既存プロジェクトのコードリファクタリングに参加し、フロントエンドコード構造とパフォーマンスを最適化；',
+            '既存プロジェクトの日常保守を担当し、バグの修正と機能の最適化；',
+            'リファクタリングプロセス中の技術的課題の解決を他のメンバーに支援。',
+          ],
+        },
+        company3: {
+          name: '深圳得程情報有限公司',
+          role: 'フロントエンド開発エンジニア',
+          desc: 'マルチプラットフォームプロジェクト開発と保守',
+          items: [
+            '会社の自社開発プロジェクト、会社ウェブサイト、採用ウェブサイト、WeChatミニプログラム機能の開発を担当し、複数のH5アクティビティプロジェクトの開発を担当；',
+            '既存プロジェクトの日常保守を担当し、バグの修正と機能の最適化；',
+            'VRプロジェクトプロセスの学習と最適化、プロジェクト開発中の技術的課題の解決。',
+          ],
+        },
       },
     },
     login: {

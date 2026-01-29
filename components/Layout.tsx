@@ -5,8 +5,9 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { ThemeContext, PostContext, LanguageContext } from '../app/providers';
 import { NAV_CONFIG } from '../constants';
-import { Moon, Sun, Menu, X, Github, Twitter, Rss, MessageCircle, Search, Languages, Check, User, LogOut } from 'lucide-react';
+import { Moon, Sun, Menu, X, Github, Rss, MessageCircle, Search, Languages, Check, User, LogOut } from 'lucide-react';
 import { SearchModal } from './SearchModal';
+import { WeChatQRModal } from './WeChatQRModal';
 import { Language } from '../locales';
 import { getCurrentUser, logoutUser } from '../services/auth';
 import { UserProfile } from '../types';
@@ -21,6 +22,8 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const pathname = usePathname();
   const [user, setUser] = useState<UserProfile | null>(null);
+  const [showWechatQR, setShowWechatQR] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   // Language State
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
@@ -35,6 +38,11 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     { code: 'en', label: 'English' },
     { code: 'jp', label: '日本語' }
   ];
+
+  // Mark as mounted to avoid hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     setUser(getCurrentUser());
@@ -109,6 +117,8 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         posts={posts}
       />
 
+      <WeChatQRModal isOpen={showWechatQR} onClose={() => setShowWechatQR(false)} />
+
       {/* Header - Fixed positioning */}
       <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-2xl bg-white/70 dark:bg-dark/60 border-b border-gray-200/50 dark:border-white/5 transition-all duration-300 w-full">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -120,7 +130,10 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                         <span className="text-white dark:text-gray-900 font-bold text-xl font-serif">权</span>
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-xl font-bold tracking-tight text-gray-900 dark:text-white group-hover:text-primary transition-colors leading-none">
+                        <span 
+                            className="text-xl font-bold tracking-tight text-gray-900 dark:text-white group-hover:text-primary transition-colors leading-none"
+                            suppressHydrationWarning
+                        >
                             {t('siteName')}
                         </span>
                         <span className="text-[10px] font-bold tracking-widest text-gray-400 dark:text-gray-500 uppercase mt-1">Ethan Liu</span>
@@ -310,23 +323,37 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="text-center md:text-left space-y-1">
-              <p className="text-xl font-black text-gray-900 dark:text-white tracking-tight">
+              <p 
+                className="text-xl font-black text-gray-900 dark:text-white tracking-tight"
+                suppressHydrationWarning
+              >
                  {t('siteName')}
               </p>
-              <p className="text-sm text-gray-500 dark:text-gray-500 font-medium">
-                © {typeof window !== 'undefined' ? new Date().getFullYear() : 2025} NO BUG, NO CODE.
+              <p 
+                className="text-sm text-gray-500 dark:text-gray-500 font-medium"
+                suppressHydrationWarning
+              >
+                © {mounted ? new Date().getFullYear() : 2025} NO BUG, NO CODE.
               </p>
+              <a 
+              href="https://beian.miit.gov.cn/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
+            >
+              粤ICP备2026003108号-1
+            </a>
             </div>
             <div className="flex space-x-4">
-              {[
-                  { Icon: Github, hover: 'hover:text-black dark:hover:text-white', link: '#' },
-                  { Icon: MessageCircle, hover: 'hover:text-green-500', link: '#' },
-                  { Icon: Rss, hover: 'hover:text-orange-500', link: '/rss.xml', target: '_blank' }
-              ].map(({ Icon, hover, link, target }, i) => (
-                  <a key={i} href={link} target={target} className={`p-2.5 rounded-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/5 text-gray-400 transition-all hover:scale-110 hover:shadow-md active:scale-90 ${hover}`}>
-                    <Icon size={18} />
-                  </a>
-              ))}
+              <a href="https://github.com/lanlangmozhu" target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/5 text-gray-400 transition-all hover:scale-110 hover:shadow-md active:scale-90 hover:text-black dark:hover:text-white">
+                <Github size={18} />
+              </a>
+              <button onClick={() => setShowWechatQR(true)} className="p-2.5 rounded-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/5 text-gray-400 transition-all hover:scale-110 hover:shadow-md active:scale-90 hover:text-green-500">
+                <MessageCircle size={18} />
+              </button>
+              <a href="/rss.xml" target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/5 text-gray-400 transition-all hover:scale-110 hover:shadow-md active:scale-90 hover:text-orange-500">
+                <Rss size={18} />
+              </a>
             </div>
           </div>
         </div>

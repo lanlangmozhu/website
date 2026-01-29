@@ -147,10 +147,15 @@ const CodeBlock = ({ inline, className, children, ...props }: any) => {
   const language = match ? match[1] : 'text';
   const codeContent = String(children).replace(/\n$/, '');
 
+  // Check if this should be treated as inline code
+  // Single words or short single-line code without explicit language should be inline
+  const isShortSingleLine = !inline && codeContent.trim().length <= 50 && !codeContent.includes('\n');
+  const shouldBeInline = inline || (isShortSingleLine && (language === 'text' || !match));
+
   // Apply Syntax Highlighting (must be before early returns)
   useEffect(() => {
-    // Only apply highlighting if not demo or embed
-    if (language === 'demo' || language === 'embed') {
+    // Only apply highlighting if not demo or embed, and not inline
+    if (shouldBeInline || language === 'demo' || language === 'embed') {
       return;
     }
     const highlightCode = () => {
@@ -178,7 +183,7 @@ const CodeBlock = ({ inline, className, children, ...props }: any) => {
       // Cleanup after 5 seconds
       setTimeout(() => clearInterval(checkHljs), 5000);
     }
-  }, [children, language]);
+  }, [children, language, shouldBeInline]);
   
   // Intercept 'demo' language
   if (language === 'demo') {
@@ -196,7 +201,7 @@ const CodeBlock = ({ inline, className, children, ...props }: any) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  if (inline) {
+  if (shouldBeInline) {
     return (
       <code className={`${className} bg-gray-100 dark:bg-gray-800 text-pink-600 dark:text-pink-400 px-1.5 py-0.5 rounded-md font-mono text-sm font-bold border border-gray-200 dark:border-gray-700`} {...props}>
         {children}

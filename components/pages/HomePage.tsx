@@ -1,25 +1,19 @@
 'use client';
 
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Link from 'next/link';
 import { PostContext, LanguageContext } from '../../app/providers';
 import { NAV_CONFIG } from '../../constants';
-import { MessageCircle, Rss, Twitter, Code, Brain, BookOpen, User, Github, Loader2, ArrowRight, Sparkles } from 'lucide-react';
+import { MessageCircle, Rss, User, Github, Loader2, ArrowRight, Sparkles } from 'lucide-react';
+import { WeChatQRModal } from '../WeChatQRModal';
+import { getNavIcon, getNavColorClass } from '../../utils/icons';
 
 export const HomePage: React.FC = () => {
   const { posts, loading } = useContext(PostContext);
   const { t } = useContext(LanguageContext);
   const recentPosts = posts.slice(0, 3);
+  const [showWechatQR, setShowWechatQR] = useState(false);
 
-  // Helper to get icon for nav item
-  const getIcon = (key: string) => {
-    switch(key) {
-        case 'blog': return <BookOpen size={32} />;
-        case 'practice': return <Code size={32} />;
-        case 'ai': return <Brain size={32} />;
-        default: return <BookOpen size={32} />;
-    }
-  };
 
   // Helper to get color for nav item
   const getColorClass = (key: string) => {
@@ -33,6 +27,8 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="space-y-24 pb-12">
+      <WeChatQRModal isOpen={showWechatQR} onClose={() => setShowWechatQR(false)} />
+
       {/* Hero Section */}
       <section className="relative flex flex-col items-center justify-center py-24 sm:py-32 text-center space-y-8 animate-slideUp">
         
@@ -60,42 +56,48 @@ export const HomePage: React.FC = () => {
 
         {/* Social Links Row - Updated to match Footer (Github, WeChat, RSS) */}
         <div className="flex items-center gap-4 pt-6">
-            {[
-                { icon: <Github size={20} />, label: 'GitHub', link: '#' },
-                { icon: <MessageCircle size={20} />, label: 'WeChat', link: '#' },
-                { icon: <Rss size={20} />, label: 'RSS', link: '#' }
-            ].map((item, idx) => (
-                <a key={idx} href={item.link} className="group relative flex items-center gap-2 px-5 py-2.5 bg-white/50 dark:bg-white/5 rounded-full border border-gray-200/60 dark:border-white/10 hover:border-primary/50 dark:hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10">
-                    <span className="text-gray-600 dark:text-gray-300 group-hover:text-primary transition-colors">{item.icon}</span>
-                    <span className="text-sm font-bold text-gray-600 dark:text-gray-300 group-hover:text-primary transition-colors">{item.label}</span>
-                </a>
-            ))}
+            <a href="https://github.com/lanlangmozhu" target="_blank" rel="noopener noreferrer" className="group relative flex items-center gap-2 px-5 py-2.5 bg-white/50 dark:bg-white/5 rounded-full border border-gray-200/60 dark:border-white/10 hover:border-primary/50 dark:hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10">
+                <span className="text-gray-600 dark:text-gray-300 group-hover:text-primary transition-colors"><Github size={20} /></span>
+                <span className="text-sm font-bold text-gray-600 dark:text-gray-300 group-hover:text-primary transition-colors">GitHub</span>
+            </a>
+            <button onClick={() => setShowWechatQR(true)} className="group relative flex items-center gap-2 px-5 py-2.5 bg-white/50 dark:bg-white/5 rounded-full border border-gray-200/60 dark:border-white/10 hover:border-primary/50 dark:hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10">
+                <span className="text-gray-600 dark:text-gray-300 group-hover:text-primary transition-colors"><MessageCircle size={20} /></span>
+                <span className="text-sm font-bold text-gray-600 dark:text-gray-300 group-hover:text-primary transition-colors">WeChat</span>
+            </button>
+            <a href="/rss.xml" target="_blank" rel="noopener noreferrer" className="group relative flex items-center gap-2 px-5 py-2.5 bg-white/50 dark:bg-white/5 rounded-full border border-gray-200/60 dark:border-white/10 hover:border-primary/50 dark:hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10">
+                <span className="text-gray-600 dark:text-gray-300 group-hover:text-primary transition-colors"><Rss size={20} /></span>
+                <span className="text-sm font-bold text-gray-600 dark:text-gray-300 group-hover:text-primary transition-colors">RSS</span>
+            </a>
         </div>
       </section>
 
       {/* Dynamic Navigation Cards */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto px-4">
+      <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6 max-w-6xl mx-auto px-4">
           {NAV_CONFIG.map(nav => (
             <Link 
                 key={nav.key} 
                 href={nav.path} 
-                className="group relative flex flex-col items-center p-8 rounded-[2rem] bg-white/60 dark:bg-gray-900/40 border border-gray-200/50 dark:border-white/5 hover:border-primary/30 dark:hover:border-primary/30 backdrop-blur-md shadow-sm hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-2 transition-all duration-500 overflow-hidden"
+                className="group relative flex flex-col items-center p-4 lg:p-8 rounded-xl lg:rounded-[2rem] bg-white/60 dark:bg-gray-900/40 border border-gray-200/50 dark:border-white/5 hover:border-primary/30 dark:hover:border-primary/30 backdrop-blur-md shadow-sm hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-2 transition-all duration-500 overflow-hidden"
             >
-                <div className={`p-5 rounded-2xl mb-6 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 ${getColorClass(nav.key)} ring-1 ring-inset ring-black/5 dark:ring-white/5`}>
-                    {getIcon(nav.key)}
+                <div className={`p-2.5 lg:p-5 rounded-lg lg:rounded-2xl mb-3 lg:mb-6 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 ${getNavColorClass(nav.key)} ring-1 ring-inset ring-black/5 dark:ring-white/5`}>
+                    <div className="scale-75 lg:scale-100">
+                        {getNavIcon(nav.key)}
+                    </div>
                 </div>
-                <span className="font-bold text-xl text-gray-900 dark:text-white relative z-10">{t(nav.titleKey)}</span>
+                <span className="font-bold text-sm lg:text-xl text-gray-900 dark:text-white relative z-10">{t(nav.titleKey)}</span>
                 
                 {/* Hover Gradient Bg */}
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/50 dark:to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
             </Link>
           ))}
           
-          <Link href="/about" className="group relative flex flex-col items-center p-8 rounded-[2rem] bg-white/60 dark:bg-gray-900/40 border border-gray-200/50 dark:border-white/5 hover:border-yellow-500/30 dark:hover:border-yellow-500/30 backdrop-blur-md shadow-sm hover:shadow-2xl hover:shadow-yellow-500/10 hover:-translate-y-2 transition-all duration-500 overflow-hidden">
-               <div className="p-5 rounded-2xl mb-6 bg-yellow-50 dark:bg-yellow-500/10 text-yellow-500 group-hover:text-yellow-600 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 ring-1 ring-inset ring-black/5 dark:ring-white/5">
-                    <User size={32} />
+          <Link href="/about" className="group relative flex flex-col items-center p-4 lg:p-8 rounded-xl lg:rounded-[2rem] bg-white/60 dark:bg-gray-900/40 border border-gray-200/50 dark:border-white/5 hover:border-yellow-500/30 dark:hover:border-yellow-500/30 backdrop-blur-md shadow-sm hover:shadow-2xl hover:shadow-yellow-500/10 hover:-translate-y-2 transition-all duration-500 overflow-hidden">
+               <div className="p-2.5 lg:p-5 rounded-lg lg:rounded-2xl mb-3 lg:mb-6 bg-yellow-50 dark:bg-yellow-500/10 text-yellow-500 group-hover:text-yellow-600 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 ring-1 ring-inset ring-black/5 dark:ring-white/5">
+                    <div className="scale-75 lg:scale-100">
+                        <User size={32} />
+                    </div>
                 </div>
-              <span className="font-bold text-xl text-gray-900 dark:text-white relative z-10">{t('nav.about')}</span>
+              <span className="font-bold text-sm lg:text-xl text-gray-900 dark:text-white relative z-10">{t('nav.about')}</span>
           </Link>
       </section>
 

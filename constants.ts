@@ -35,6 +35,13 @@ export const NAV_CONFIG: NavConfigItem[] = [
   { key: 'ai', path: '/ai', folder: 'ai', titleKey: 'nav.ai' },
 ];
 
+// QR Code Images Configuration
+export const QR_IMAGES = {
+  wechatContact: '/images/qr/wechat-contact.jpg',
+  wechatPay: '/images/qr/wechat-pay.jpg',
+  alipay: '/images/qr/alipay-pay.jpg',
+};
+
 // About Page Data Definition
 export const ABOUT_DATA = {
     skills: [
@@ -44,26 +51,33 @@ export const ABOUT_DATA = {
         { iconKey: 'PenTool', textKey: 'about.skills.experience', color: 'text-blue-500' },
         { iconKey: 'Briefcase', textKey: 'about.skills.management', color: 'text-pink-500' },
     ],
+    technicalStack: [
+        { key: 'coding', color: 'bg-blue-500' },
+        { key: 'framework', color: 'bg-purple-500' },
+        { key: 'engineering', color: 'bg-orange-500' },
+        { key: 'client', color: 'bg-green-500' },
+        { key: 'performance', color: 'bg-pink-500' },
+        { key: 'backend', color: 'bg-emerald-500' },
+        { key: 'designPattern', color: 'bg-indigo-500' },
+        { key: 'algorithm', color: 'bg-cyan-500' },
+    ],
+    education: {
+        university: '湖南湘潭大学',
+        major: '计算机科学与技术（本科）',
+    },
+    personalEvaluation: '热衷于前端开发领域，不断扩展专业知识库，无论面对何种新兴技术，始终持积极态度，并通过阅读专业书籍、资料以及相关视频，能在一周内快速理解并应用这些技术。',
     experience: [
         { 
-          date: '2023.10 ~ Present', 
-          company: '美叶', 
-          role: '合作设计师 & 产品经理', 
-          desc: '相关产品孵化中...',
-          items: [
-            '不断学习 AI 相关技术与工具，联合创立一款行业解决方案式 AI 产品；',
-            '追求自我价值实现，与多个领域团队合作共创数个开源项目，丰富团队协作经验、积累开源项目经验、进一步提升开发水平。'
-          ] 
+          date: '2022.07 ~ 2025.09', 
+          companyKey: 'company1',
         },
         { 
-          date: '2019.08 ~ 2023.08', 
-          company: '青云科技有限公司', 
-          role: '高级产品设计师', 
-          desc: '青云 QingCloud 设计资产',
-          items: [
-            '利用工程化思维沉淀完善且可落地的基础、业务、模式组件库及周边生态，覆盖 93% 产品线，规范设计产出、降低约 50% 验收成本、提升体验一致性与跨部门协作效率；',
-            '解决图标、插画、可视化组件等基础设施的从无到有问题，深入了解其生命流程并建立前沿、高效的交付流程（交付周期缩短 3/4），真正解放设计师、研发双手，赋能产品、市场。'
-          ] 
+          date: '2020.01 ~ 2022.05', 
+          companyKey: 'company2',
+        },
+        { 
+          date: '2017.07 ~ 2019.12', 
+          companyKey: 'company3',
         },
     ]
 };
